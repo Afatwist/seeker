@@ -6,8 +6,8 @@
 export function goToPage() {
     const page = localStorage.getItem('page');
 
-    if (page === 'constructor') return '../../pages/constructor/board.html';
-    if (page === 'game') return '../../pages/game.html';
+    if (page === 'constructor') return '../pages/constructor/board.html';
+    if (page === 'game') return '../pages/game.html';
     return '/';
 }
 
