@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/form.css">
+    <script type="module" src="../../scripts/construcror/create.js" defer></script>
+    <script type="module" src="../../scripts/btn-menu.js" defer></script>
+    <title>Искатель - Создать Уровень</title>
+</head>
+
+<body>
+
+    <div class="container flex-col">
+        <header class="flex-col">
+            <h1 class="main-title select-not">Искатель</h1>
+            <h2 class="sub-title select-not">Создать уровень</h2>
+        </header>
+
+
+        <div class="box box-high flex-col">
+
+            <form class="form flex-col" id="form-create">
+                <div class="form-section flex-col">
+                    <span class="form-section-title">Размеры игрового поля</span>
+                    <div class="flex-row form-input-size">
+                        <div class="flex-row">
+                            <label class="form-label" for="row">Рядов</label>
+                            <input class="form-input input-num" type="number" name="row" id="row" min="1" max="100"
+                                value="10" required>
+                        </div>
+
+                        <div class="flex-row">
+                            <label class="form-label" for="col">Колонок</label>
+                            <input class="form-input input-num" type="number" name="col" id="col" min="1" max="100"
+                                value="10" required>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-section flex-row">
+                    <label for="title" class="form-label">Название</label>
+                    <input class="form-input" type="text" name="title" id="title" value="Мой уровень" required>
+                </div>
+
+                <div class="form-section flex-row">
+                    <label for="author" class="form-label">Автор</label>
+                    <input class="form-input" type="text" name="author" id="author" value="Автор" required>
+                </div>
+
+                <div class="form-section flex-row">
+                    <span class="form-label">Описание</span>
+                    <textarea class="form-input" rows="3" cols="20" name="description">Лучший уровень!</textarea>
+                </div>
+
+
+                <div class="form-section flex-row">
+                    <label for="game_difficulty" class="form-label">Сложность</label>
+                    <select class="form-input" name="game_difficulty" id="game_difficulty">
+                        <option value="easy">Легкая</option>
+                        <option selected value="normal">Нормальная</option>
+                        <option value="hard">Сложная</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-lg btn-primary" type="submit">Создать</button>
+            </form>
+
+
+            <div class="menu flex-col">
+                <button class="btn btn-lg btn-secondary" id="to-back-menu">Предыдущее меню</button>
+                <button class="btn btn-lg btn-secondary" id="to-main-page">Главная страница</button>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

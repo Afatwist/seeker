@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link rel="stylesheet" href="../../styles/form.css">
+    <script type="module" src="../../scripts/construcror/edit.js" defer></script>
+    <script type="module" src="../../scripts/btn-menu.js" defer></script>
+    <title>Искатель - Редактировать Уровень</title>
+</head>
+
+<body>
+
+    <div class="container flex-col">
+        <header class="flex-col">
+            <h1 class="main-title select-not">Искатель</h1>
+            <h2 class="sub-title select-not">Редактировать уровень</h2>
+        </header>
+
+
+        <div class="box box-high flex-col">
+
+            <form class="form flex-col" id="form-edit">
+
+                <div class="form-section flex-row">
+                    <label class="form-label select-not" for="title">Название</label>
+                    <input class="form-input" type="text" name="title" id="title" required>
+                </div>
+
+                <div class="form-section flex-row">
+                    <label for="author" class="form-label select-not">Автор</label>
+                    <input class="form-input" type="text" name="author" id="author" required>
+                </div>
+
+                <div class="form-section flex-row">
+                    <span class="form-label select-not">Описание</span>
+                    <textarea class="form-input" rows="3" cols="20" name="description"></textarea>
+                </div>
+
+
+                <div class="form-section flex-row">
+                    <label for="game_difficulty" class="form-label select-not">Сложность</label>
+                    <select class="form-input" name="game_difficulty" id="game_difficulty">
+                        <option value="easy">Легкая</option>
+                        <option selected value="normal">Нормальная</option>
+                        <option value="hard">Сложная</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-lg btn-primary" type="submit">Редактировать</button>
+            </form>
+
+
+            <div class="menu flex-col">
+                <button class="btn btn-lg btn-secondary" id="to-back-menu">Вернуться в редактор</button>
+                <button class="btn btn-lg btn-secondary" id="to-main-page">Главная страница</button>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

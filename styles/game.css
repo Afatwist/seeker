@@ -1,0 +1,226 @@
+@font-face {
+    font-family: 'RobotoBlack';
+    src: url('../sources/fonts/Roboto-Black.ttf');
+}
+
+@font-face {
+    font-family: 'RusDisplay';
+    src: url('../sources/fonts/RuslanDisplay-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'MulishRegular';
+    src: url('../sources/fonts/Mulish-Regular.ttf');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-size: 26px;
+}
+
+.header {
+    width: 100vw;
+    height: 13vh;
+    position: relative;
+    z-index: 100;
+    padding: 5px 15px;
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    column-gap: 15px;
+}
+
+.info-section {
+    font-size: 20px;
+    font-family: 'MulishRegular';
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.level-title {
+    font-size: 24px;
+    font-family: 'RobotoBlack';
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.menu {
+    display: flex;
+    flex-direction: row;
+}
+
+.btn {
+    font-size: 18px;
+    font-family: 'MulishRegular';
+    margin: 3px;
+    padding: 5px;
+    background-color: burlywood;
+    border: 1px solid rgb(152, 110, 56);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 1s, border 1s;
+}
+
+.btn:hover {
+    background-color: rgb(241, 163, 62);
+    border: 1px solid rgb(96, 63, 19);
+}
+.to-constructor {
+    display: none;
+}
+
+.game {
+    position: relative;
+    width: 100vw;
+    height: 87vh;
+}
+
+.game-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.board {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.cell,
+.item {
+    width: 60px;
+    height: 60px;
+}
+
+.cell {
+    border-right: 1px solid grey;
+    border-bottom: 1px solid grey;
+}
+
+.none {
+    border: none;
+}
+
+.border-top {
+    border-top: 3px solid grey;
+}
+
+.border-bottom {
+    border-bottom: 3px solid grey;
+}
+
+.border-left {
+    border-left: 3px solid grey;
+}
+
+.border-right {
+    border-right: 3px solid grey;
+}
+
+
+.enemy-killer {
+    animation-name: enemy-killer_anim;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: linear;
+}
+
+@keyframes enemy-killer_anim {
+    from {
+        transform: scale(0.5);
+    }
+
+    50% {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.5);
+    }
+}
+
+/* ################################### */
+/* Модальное окно */
+.modal {
+    display: none;
+    background: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.modal-show {
+    display: block;
+}
+
+.modal-window {
+    position: absolute;
+    top: 30%;
+    bottom: 30%;
+    left: 35%;
+    right: 35%;
+
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    cursor: default;
+    padding: 40px 20px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    row-gap: 35px;
+}
+
+.modal-content {
+    /* position: relative; */
+    font-size: 24px;
+    font-family: 'RobotoBlack';
+    text-align: center;
+}
+
+.modal-button_group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 5px;
+}

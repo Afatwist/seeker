@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <title>Искатель</title>
+    <script type="module" src="../scripts/game/main.js" defer></script>
+    <link rel="stylesheet" href="../styles/game.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="info">
+            <span class="level-title"></span>
+            <div class="info-section">
+                <p>Добычи осталось: <span class="loot-count"></span></p>
+                <span class="finish-status"></span>
+            </div>
+        </div>
+
+        <div class="menu">
+            <button class="btn to-constructor">В конструктор</button>
+            <button class="btn replay">Заново</button>
+            <button class="btn level-list">К выбору уровней</button>
+            <button class="btn to-main-page">В главное меню</button>
+        </div>
+    </header>
+
+
+    <div class="game" id="game">
+        <div class="board" id="board"></div>
+    </div>
+
+    <div class="modal" id="modal-result">
+        <div class="modal-window">
+            <div class="modal-content"></div>
+            <div class="modal-button_group">
+                <button class="btn to-constructor">В конструктор</button>
+                <button class="btn modal-btn replay">Играть еще раз</button>
+                <button class="btn modal-btn level-list">К списку уровней</button>
+                <button class="btn modal-btn to-main-page">На главную</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

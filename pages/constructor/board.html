@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/constructor-board.css">
+    <script type="module" src="../../scripts/construcror/board.js" defer></script>
+    <script src="../../scripts/vendors/html2canvas.min.js" defer></script>
+    <title>Искатель - редактирование уровня</title>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            <div class="header-section info">
+                <div class="info-item board-size">
+                    <span class="info-item-title">Размеры поля:</span>
+                    <div class="info-item-group">
+                        <span class="info-group-part">рядов: <span id="info-row"></span></span>
+                        <span class="info-group-part">колонок: <span id="info-col"></span></span>
+                    </div>
+                </div>
+                <div class="info-item items-count">
+                    <span class="info-item-title">Количество предметов:</span>
+                    <div class="info-item-group">
+                        <span class="info-group-part">Добыча: <span id="info-loot"></span></span>
+                        <span class="info-group-part">Препятствия: <span id="info-hurdle"></span></span>
+                        <span class="info-group-part">Противник: <span id="info-enemy"></span></span>
+                    </div>
+                </div>
+                <div class="info-item pointer-control">
+                    <span class="info-group-part">Старт: <span id="info-start"></span></span>
+                    <span class="info-group-part">Финиш: <span id="info-finish"></span></span>
+                </div>
+            </div>
+
+            <div class="header-section top-menu">
+                <div class="top-menu-section">
+                    <button class="top-menu-btn" id="btnBackward" disabled>Отменить</button>
+                    <button class="top-menu-btn" id="btnForward" disabled>Вернуть</button>
+                </div>
+                <div class="top-menu-section">
+                    <button class="top-menu-btn" id="btnDataEdit">Изменить описание</button>
+                    <button class="top-menu-btn" id="btnSave">Сохранить</button>
+                    <button class="top-menu-btn" id="btnScreenshot">Сделать скриншот поля</button>
+                    <button class="top-menu-btn" id="btnPlay">Играть!</button>
+                </div>
+                <div class="top-menu-section">
+                    <button class="top-menu-btn" id="btnBackConstructor">В главное меню конструктора</button>
+                    <button class="top-menu-btn" id="btnHowItWork"> Как это работает?</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="redactor">
+            <aside class="side-menu">
+                <div class="menu-section menu-cell">
+                    <div class="menu-subsection">
+                        <button class="btn btn-single" data-menu="cell" data-type="cell-clear" data-item="none">Очистить
+                            клетку</button>
+                    </div>
+                </div>
+
+                <div class="menu-section menu-row">
+                    <div class="menu-subsection">
+                        <span class="subsection-title">Добавить ряд</span>
+                        <div class="buttons-groupe row-add">
+                            <button class="btn button-in-groupe button-in-groupe-row-col" data-menu="row"
+                                data-type="row-add" data-position="beforebegin">Сверху</button>
+
+                            <button class="btn button-in-groupe button-in-groupe-row-col" data-menu="row"
+                                data-type="row-add" data-position="afterend">Снизу</button>
+
+                        </div>
+                    </div>
+                    <div class="menu-subsection">
+                        <button class="btn btn-single" data-menu="row" data-type="row-remove">Удалить ряд</button>
+                    </div>
+                </div>
+
+                <div class="menu-section menu-col">
+                    <div class="menu-subsection">
+                        <span class="subsection-title">Добавить колонку</span>
+                        <div class="buttons-groupe col-add">
+                            <button class="btn button-in-groupe button-in-groupe-row-col" data-menu="col"
+                                data-type="col-add" data-position="beforebegin">Слева</button>
+
+                            <button class="btn button-in-groupe button-in-groupe-row-col" data-menu="col"
+                                data-type="col-add" data-position="afterend">Справа</button>
+
+                        </div>
+                    </div>
+                    <div class="menu-subsection">
+                        <button class="btn btn-single" data-menu="col" data-type="col-remove">Удалить колонку</button>
+                    </div>
+                </div>
+            </aside>
+            <div class="board" id="board" data-notes="0"></div>
+        </div>
+    </div>
+
+    <div class="modalHowItWork">
+        <div class="modal-window">
+            <button class="modal-close">X</button>
+            <div class="modal-content">
+                <p>Левая панель меню позволяет добавить на игровое поле различные предметы: Добычу, Препятствия,
+                    Противников и другие. </p>
+                <p>Можно сменить тип клетки: Пустая - на такой клетке свободно могут перемещаться игрок, противник, на
+                    эту клетку можно перемещать предметы; Земля - на эту клетку может попасть только игрок, после чего
+                    она становится Пустой; Стена - на эту клетку нельзя переместиться.</p>
+                <p>Не забудьте добавить на поле клетку Старт! Так же следите, чтобы от клетки Старт можно было добраться
+                    до клеток с добычей.
+                    Клетку Финиш можно не добавлять.
+                    Финиш может быть Открытым, тогда игра закончится,
+                    как только игрок попадет на эту клетку. Если Финиш Закрыт, то сначала нужно собрать всю добычу на
+                    поле. Если клетки Финиш нет, то игра закончится, когда игрок соберет всю добычу.
+                </p>
+                <p>Кнопка Очистить клетку удаляет все предметы и тип клетки, на такую клетку нельзя переместиться в игре
+                </p>
+                <p> Кнопки управления рядами и колонками: позволяют добавить или удалить ряд или колонку :) </p>
+                <hr />
+                <p>Для совершения действия нажмите на кнопку на левой панели меню, а затем на нужную клетку. Если нужно
+                    заполнить весь ряд или колонку, нажмите на боковую или верхнюю кнопку с номером ряда или колонки.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

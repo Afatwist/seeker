@@ -1,0 +1,125 @@
+.game,
+.redactor,
+.none {
+    background-color: burlywood;
+}
+
+.header {
+    background-color: rgb(202, 166, 122);
+    /* background-color: #b6725f; */
+    border-bottom-color: brown;
+}
+
+/* .none {
+    background-color: burlywood;
+} */
+
+.free {
+    background-image: url('free.png');
+}
+
+.ground {
+    background-image: url('ground.png');
+}
+
+.wall {
+    background-image: url('wall.png');
+}
+
+.wall-border-red {
+    /* background: red; */
+    border: 2px solid red;
+}
+
+.start {
+    background-image: url('start.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.finish-close {
+    background-image: url('finish_close.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.finish-open {
+    background-image: url('finish_open.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.item-not-moving {
+    background: red;
+}
+
+.item {
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.loot-1 {
+    background-image: url('loot_1.png');
+}
+
+.loot-2 {
+    background-image: url('loot_2.png');
+}
+
+.hurdle-1 {
+    background-image: url('hurdle-1.png');
+}
+
+.enemy-walk {
+    background-image: url('enemy_walk.png');
+}
+
+.enemy-angry {
+    background-image: url('enemy_angry.png');
+}
+
+.enemy-wary {
+    background-image: url('enemy_wary.png');
+}
+
+.enemy-hunt {
+    background-image: url('enemy_hunt.png');
+}
+
+.player {
+    background-image: url('player.png');
+}
+
+.player-die {
+    background-image: url('player_die.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.fire {
+    background-image: url('fire.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* границы поля и клеток рядом с пустыми клетками */
+
+:root {
+    --cell-main-border: 2px solid brown;
+}
+
+.border-left {
+    border-left: var(--cell-main-border);
+}
+
+.border-right {
+    border-right: var(--cell-main-border);
+}
+
+.border-top {
+    border-top: var(--cell-main-border);
+}
+
+.border-bottom {
+    border-bottom: var(--cell-main-border);
+}

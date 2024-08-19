@@ -1,0 +1,154 @@
+@font-face {
+    font-family: 'RobotoBlack';
+    src: url('../sources/fonts/Roboto-Black.ttf');
+}
+
+@font-face {
+    font-family: 'RusDisplay';
+    src: url('../sources/fonts/RuslanDisplay-Regular.ttf');
+}
+@font-face {
+    font-family: 'MulishRegular';
+    src: url('../sources/fonts/Mulish-Regular.ttf');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: burlywood;
+}
+
+.select-not {
+    cursor: default;
+    user-select: none;
+}
+
+.select-not-pointer {
+    cursor: pointer;
+    user-select: none;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+h1,
+h2 {
+    color: brown;
+    font-family: "RusDisplay";
+}
+
+.main-title {
+    font-size: 150px;
+}
+
+.main-title-lg {
+    font-size: 200px;
+}
+
+.sub-title {
+    font-size: 50px;
+}
+
+.box {
+    width: 800px;
+    height: 600px;
+
+    margin: 30px auto;
+    padding: 25px;
+
+    background-color: rgba(202, 166, 122, 0.5);
+    border-radius: 70px;
+}
+
+.box-high {
+    height: auto;
+    width: auto;
+    min-width: 750px;
+}
+
+.menu {
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.menu-section {
+    margin: 20px auto;
+}
+
+.btn {
+    font-family: "RobotoBlack";
+    cursor: pointer;
+    border-width: 2px;
+    border-style: solid;
+    transition: background-color 2s, border 1s, transform 1.5s;
+}
+
+.btn-lg {
+    width: 400px;
+    height: 90px;
+    border-radius: 15px;
+    font-size: 30px;
+}
+
+.btn-md {
+    width: 300px;
+    height: 90px;
+    border-radius: 15px;
+    font-size: 30px;
+}
+
+.btn-primary {
+    border-color: brown;
+    background-color: rgb(191 107 85);
+}
+
+.btn-primary:hover {
+    background-color: rgb(219, 74, 38);
+    border-color: brown;
+    transform: scale(105%);
+}
+
+.btn-secondary {
+    background-color: rgb(244, 164, 96);
+    border-color: rgb(210, 105, 30);
+}
+
+.btn-secondary:hover {
+    background-color: rgb(205, 133, 63);
+    border-color: rgb(139, 69, 19);
+    transform: scale(105%);
+}
+
+.box-how_play {
+    width: 90%;
+    height: 100%;
+}
+
+.how_play-content {
+    font-family: 'MulishRegular';
+    font-size: 22px;
+}
+
+.box-how_play p {
+    text-indent: 25px;
+    margin-top: 15px;
+}
+
+.marker {
+    font-family: "RobotoBlack";
+}
