@@ -81,6 +81,13 @@ h2 {
     min-width: 750px;
 }
 
+.box-levels-list {
+    width: auto;
+    height: auto;
+    margin: 25px auto;
+    padding: 40px;
+}
+
 .menu {
     justify-content: space-between;
     gap: 30px;
