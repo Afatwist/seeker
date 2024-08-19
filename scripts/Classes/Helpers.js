@@ -8,7 +8,7 @@ export function goToPage() {
 
     if (page === 'constructor') return '../pages/constructor/board.html';
     if (page === 'game') return '../pages/game.html';
-    return '/';
+    return baseUrl;
 }
 
 export const baseUrl = '/seeker/';
