@@ -1,7 +1,7 @@
 // Обработчик для страницы Список стандартных уровней - файл: file-choose.html
 
-import { Level } from "../Classes/Level.js";
-import { goToPage, localStorageClear } from "../Classes/Helpers.js";
+import { Level } from "./Classes/Level.js";
+import { goToPage, localStorageClear } from "./Classes/Helpers.js";
 
 localStorageClear();
 // ####################################################################

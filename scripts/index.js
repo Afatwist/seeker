@@ -4,7 +4,7 @@ localStorage.clear();
 
 document.getElementById('in-game').addEventListener('click', () => {
     localStorage.setItem('page', 'game');
-    window.open('pages/file-choose/file-choose.html', '_self');
+    window.open('pages/file-choose.html', '_self');
 });
 
 document.getElementById('constructor').addEventListener('click', () => {
