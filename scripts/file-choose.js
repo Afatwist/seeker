@@ -28,7 +28,7 @@ document.getElementById('form-choose').
 const levelsList = document.getElementById('levels-list');
 // генерирует список стандартных уровней 
 for (let num = 1; num <= Level.count; num++) {
-    let { levelData } = await import(`../../sources/levels/data/${num}.js`);
+    let { levelData } = await import(`../sources/levels/data/${num}.js`);
     levelsList.appendChild(cardRender(levelData));
 }
 
@@ -44,7 +44,7 @@ function cardRender(cardData) {
     // скриншот уровня
     let cover = document.createElement('div');
     cover.classList.add('card-cover');
-    cover.style.backgroundImage = `url('../../sources/levels/cover/${cardData.id}.png')`;
+    cover.style.backgroundImage = `url('../sources/levels/cover/${cardData.id}.png')`;
 
     // название
     let title = document.createElement('span');
