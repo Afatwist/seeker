@@ -51,7 +51,7 @@ document.querySelectorAll('.level-list').forEach(btn => {
     if (localStorage.getItem('fromConstructor') !== 'true') {
         btn.removeAttribute('style');
         btn.addEventListener('click', () => {
-            window.open('../../pages/file-choose/file-choose.html', '_self');
+            window.open('../pages/file-choose/file-choose.html', '_self');
         });
     } else {
         btn.style.display = 'none';
