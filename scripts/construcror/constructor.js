@@ -5,5 +5,5 @@ document.getElementById('btn-constructor-create').addEventListener('click', () =
 });
 
 document.getElementById('btn-constructor-edit').addEventListener('click', () => {
-    window.open('../../pages/file-choose/file-choose.html', '_self');
+    window.open('../../pages/file-choose.html', '_self');
 });
