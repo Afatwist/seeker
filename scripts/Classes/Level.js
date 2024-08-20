@@ -6,7 +6,7 @@ export class Level {
    /** 
     * @property {number} количество стандартных уровней
     */
-   static count = 10
+   static count = 11
 
    id = 1 // id уровня совпадает с названием
    title = '' // название уровня
