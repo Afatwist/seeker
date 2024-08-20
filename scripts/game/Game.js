@@ -115,6 +115,7 @@ export class Game {
      * @returns {false | "down" | "up" | "left" | "right"}
      */
     static #actionCheck(key) {
+        if (this.#modalResult.classList.contains('modal-show')) return false;
         switch (key) {
             case 'KeyS': case 'ArrowDown': return 'down';
             case 'KeyW': case 'ArrowUp': return 'up';
@@ -606,6 +607,8 @@ export class Game {
     static #gameOver() {
         if (this.#player.parentElement === null) {
             setTimeout(() => {
+                this.#modalResult.querySelector('.next-level').style.display = 'none';
+                
                 this.#modalResult.querySelector('.modal-content').innerHTML = '<p>ВЫ ПРОИГРАЛИ!<br>ПОПРОБУЙТЕ ЕЩЕ РАЗ</p>';
                 this.#modalResult.classList.add('modal-show');
             }, 200);

@@ -82,3 +82,14 @@ if (Level.count > LEVEL.id) {
     btnNextLevel.style.display = 'none';
 }
 
+/** кнопка "Показать карту уровня" и модальное окно */
+const levelMap = document.getElementById('modal-level_map');
+
+document.querySelector('.show-level-map').addEventListener('click', () => {
+    levelMap.classList.add('modal-show');
+});
+levelMap.addEventListener('click', (e) => {
+    if (e.target.classList.contains('modal-close_map')) {
+        levelMap.classList.remove('modal-show');
+    }
+});

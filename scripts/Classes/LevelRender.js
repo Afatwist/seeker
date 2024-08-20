@@ -18,6 +18,8 @@ export class LevelRender {
 
     static #levelTitle;
 
+    static #id 
+
     /** 
      * @property {string} название набора графики для текущего уровня
      */
@@ -32,6 +34,7 @@ export class LevelRender {
      * @returns {typeof LevelRender} экземпляр класса
      */
     static setData(levelData, set_description = false) {
+        this.#id = levelData.id;
         this.#levelTitle = levelData.title;
         this.#boardSize = levelData.board.size;
         this.#boardData = levelData.board.data.reverse();
@@ -81,6 +84,10 @@ export class LevelRender {
             } else if (boardW < gameW) {
                 game.classList.add('game-center', 'game-center-vertical');
             }
+
+            // добавление карты уровня
+            let cover = document.querySelector('.modal-img_map');
+            cover.src = `../sources/levels/cover/${this.#id}.png`;
         }
     }
 
