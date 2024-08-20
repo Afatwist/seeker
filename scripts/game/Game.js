@@ -589,7 +589,7 @@ export class Game {
         // если клетки финиша нет, то победа происходит после сбора всей добычи
         let lootsNotExists = this.#itemsArr.every(item => item.dataset.type !== 'loot')
         let finishCellNotExists = !(document.querySelector('.cell.finish-close') ||
-            document.querySelector('.cell.finish-open'))
+            document.querySelector('.cell.finish-open'));
 
         // проверка, что игрок зашел на клетку "финиш" и он открыт
         let finish = this.#player.parentElement?.classList.contains('finish-open')
@@ -597,6 +597,7 @@ export class Game {
             setTimeout(() => {
                 this.#modalResult.querySelector('.modal-content').innerHTML = '<p>ВЫ ВЫИГРАЛИ!</p>';
                 this.#modalResult.classList.add('modal-show');
+
             }, 200);
         }
     }
@@ -610,4 +611,5 @@ export class Game {
             }, 200);
         }
     }
+
 }

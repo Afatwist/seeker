@@ -49,7 +49,6 @@ export class LevelRender {
     static make(isGame = false) {
         const board = document.getElementById('board');
         const game = document.getElementById('game');
- 
 
         for (let r = 1; r <= this.#boardSize.rows; r++) {
             let row = this.#rowRender(r);
@@ -74,7 +73,14 @@ export class LevelRender {
             let gameH = game.getBoundingClientRect().height;
             let gameW = game.getBoundingClientRect().width;
 
-            if (boardH < gameH && boardW < gameW) game.classList.add('game-center');
+
+            if (boardH < gameH && boardW < gameW) {
+                game.classList.add('game-center');
+            } else if (boardH < gameH) {
+                game.classList.add('game-center', 'game-center-horizontal');
+            } else if (boardW < gameW) {
+                game.classList.add('game-center', 'game-center-vertical');
+            }
         }
     }
 
@@ -84,7 +90,7 @@ export class LevelRender {
         let css = document.createElement('link');
         css.rel = "stylesheet";
         css.href = `${link}../sources/graphics_set/${this.#graphics_set}/style.css`;
-        
+
         document.head.append(css);
     }
 

@@ -7,8 +7,6 @@ import { baseUrl } from "../Classes/Helpers.js";
 // Получение данных игры из localStorage 
 const gameData = JSON.parse(localStorage.getItem('gameData'));
 
-
-
 /** Данные текущего уровня */
 const LEVEL = new Level(gameData);
 
@@ -70,3 +68,17 @@ document.querySelectorAll('.to-main-page').forEach(btn => {
     }
 
 })
+
+/** если это не последний существующий уровень, то в модальном окне появится кнопка перехода на следующий уровень */
+const btnNextLevel = document.querySelector('.next-level');
+if (Level.count > LEVEL.id) {
+    btnNextLevel.style.display = 'block';
+    let { levelData } = await import(`../../sources/levels/data/${LEVEL.id + 1}.js`);
+    btnNextLevel.addEventListener('click', () => {
+        localStorage.setItem("gameData", JSON.stringify(levelData));
+        location.reload();
+    });
+} else {
+    btnNextLevel.style.display = 'none';
+}
+
