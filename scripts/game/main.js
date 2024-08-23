@@ -87,9 +87,17 @@ const levelMap = document.getElementById('modal-level_map');
 
 document.querySelector('.show-level-map').addEventListener('click', () => {
     levelMap.classList.add('modal-show');
+    levelMap.addEventListener('click', modalClose);
+    document.addEventListener('keydown', modalClose);
 });
-levelMap.addEventListener('click', (e) => {
-    if (e.target.classList.contains('modal-close_map')) {
+
+
+/** закрытие модального окна по нажатию на кнопку "Закрыть" или на клавишу Esc */
+function modalClose(e) {
+    if (e.code === 'Escape' ||
+        e.target.classList.contains('modal-close_map')) {
         levelMap.classList.remove('modal-show');
+        levelMap.removeEventListener('click', modalClose);
+        document.removeEventListener('keydown', modalClose);
     }
-});
+}

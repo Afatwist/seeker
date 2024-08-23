@@ -1,5 +1,3 @@
-// !!! Оптимизировать скрипт перемещения игрока и поля
-
 /** Логика игры
  * @class Game
  */
@@ -19,12 +17,9 @@ export class Game {
      */
     static #board
 
-    /** Начальные координаты поля
-     * @type {{top: number, left: number}}
-     */
     static #startCoordinates
 
-    /** Массив всех предметов (hurdle & loot) на поле
+    /** Массив всех клеток с камнями на поле
      * @type {Array<Element>}
      */
     static #itemsArr
@@ -34,15 +29,8 @@ export class Game {
      */
     static #enemiesArr
 
-    /** Модальное окно с результатом
-    * @type {HTMLElement} 
-    */
     static #modalResult
 
-    /** Модальное окно с результатом
-     * @type {HTMLElement} 
-     */
-    static #modalMap
 
     /** Координаты клетки
      * @typedef {Object} CellCoordinates
@@ -50,63 +38,48 @@ export class Game {
      * @property {number} col - Номер колонки
      */
 
-    static #cellsObj = {}
 
-    // ############################################
     /** Игровой процесс */
     static playing() {
         this.#prepare();
         this.#infoUpdate();
-
         // this.#enemyWalk();
         document.addEventListener('keydown', (e) => {
-            // console.time('action')
-
             const action = this.#actionCheck(e.code);
-            // console.timeEnd('action')
+
             if (action) {
-                //    console.time('move')
                 const { playerCoords, boardCoords } = this.#newCoordinates(action);
 
                 this.#playerMover(playerCoords);
                 this.#boardMover(boardCoords);
-                // console.timeEnd('move')
-
-                // console.time('item')
-
+                // до сюда проверил
+                // console.log(this.#itemsArr)
                 this.#itemsArr.forEach(item => {
                     if (item.dataset.fall === '0') this.#itemFall(item);
                 })
 
-                //console.timeEnd('item')
-                //  console.log(this.#itemsArr.length)
-
-                //  console.time('enemy')
                 this.#enemiesArr.forEach(enemy => {
                     if (enemy.dataset.walk === '0') this.#enemyAction(enemy)
                 })
-                //  console.timeEnd('enemy')
-                //  console.log(this.#enemiesArr.length)
 
-                //   console.time('game+finish')
+
+
                 this.#finishOpen();
                 this.#infoUpdate();
                 this.#gameWin();
                 this.#gameOver();
-                //   console.timeEnd('game+finish')
             }
 
         });
     }
 
-    // ############ ПОДГОТОВКА К ИГРЕ И ОБНОВЛЕНИЕ ИНФОРМАЦИИ ######
-    /** Получение данных из DOM и настройки игры */
+    /** Получение данных из DOM и настройки игры
+     */
     static #prepare() {
         this.#horizonDeep = 5;
         this.#player = document.getElementById('player');
         this.#board = document.getElementById('board');
         this.#modalResult = document.getElementById('modal-result');
-        this.#modalMap = document.getElementById('modal-level_map');
 
         // Начальные координаты поля
         const startCoordinatesRect = document.querySelector(`.cell[data-row="1"][data-col="1"]`).getBoundingClientRect();
@@ -115,24 +88,15 @@ export class Game {
             left: startCoordinatesRect.left
         }
 
-        this.#itemsArr = Array.from(document.querySelectorAll("[data-type='hurdle'], [data-type='loot']")).reverse();
-
+        this.#itemsArr = Array.from(document.querySelectorAll("[data-type='hurdle'], [data-type='loot']"));
         this.#enemiesArr = Array.from(document.querySelectorAll("[data-type='enemy']"));
-
-        ///////////////////////////////////////////// 
-        document.querySelectorAll('.cell').forEach(cell => {
-            let key = `row_${cell.dataset.row}#col_${cell.dataset.col}`;
-            this.#cellsObj[key] = cell
-        })
     }
 
-    /** Обновление информационного блока в шапке игры */
     static #infoUpdate() {
-        // количество добычи, оставшееся на поле
         document.querySelector('.loot-count').textContent = document.querySelectorAll('.item[data-type="loot"]').length;
 
-        // состояние клетки финиша
         let finishStatus = document.querySelector('.finish-status');
+
 
         if (document.querySelector('.finish-close')) {
             finishStatus.textContent = 'Финиш закрыт';
@@ -141,9 +105,9 @@ export class Game {
         } else {
             finishStatus.textContent = 'Игра без Финиша, просто соберите всю добычу';
         }
+
     }
 
-    // ############ ОБРАБОТКА НАЖАТИЯ КНОПОК И ПЕРЕМЕЩЕНИЕ ИГРОКА ######
     /** Определяет какая клавиша была нажата
      *  и возвращает игровое действие в зависимости от этого
      * 
@@ -152,15 +116,15 @@ export class Game {
      */
     static #actionCheck(key) {
         if (this.#modalResult.classList.contains('modal-show')) return false;
-        if (this.#modalMap.classList.contains('modal-show')) return false;
         switch (key) {
-            case 'KeyW': case 'ArrowUp': return 'up';
             case 'KeyS': case 'ArrowDown': return 'down';
+            case 'KeyW': case 'ArrowUp': return 'up';
             case 'KeyA': case 'ArrowLeft': return 'left';
             case 'KeyD': case 'ArrowRight': return 'right';
             default: return false;
         }
     }
+
 
     /** В зависимости от игрового действия
      * Определяет новые координаты для игрока и положение игрового поля
@@ -210,6 +174,7 @@ export class Game {
             boardCoords: { boardC, horizonC }
         }
     }
+
 
     /** Перемещение игрока в новую клетку
      * 
@@ -314,40 +279,33 @@ export class Game {
         }
     }
 
-    // ############## ПОВЕДЕНИЕ ПРЕДМЕТОВ НА ПОЛЕ ##############
+
 
     /** Проверяет клетки под предметом, а также по сторонам от предмета и, если есть пустая, перемещает в нее предмет
      * 
      * @param {Element} item - предмет
      */
     static #itemFall(item) {
-
         // проверка, что предмет все еще существует
         if (!this.#itemsArr.includes(item)) return;
 
         let { row, col } = this.#getItemCoord(item);
 
-        // клетка под предметом, для падения вниз 
-        // console.log()
-        let cellBottom = this.#getCellByCoord(row + 1, col)
-        // let cellBottom = document.querySelector(`.cell[data-row="${row + 1}"][data-col="${col}"]`);
+        // клетка под предметом, для падения вниз
+        let cellBottom = document.querySelector(`.cell[data-row="${row + 1}"][data-col="${col}"]`);
         if (!cellBottom) { item.dataset.fall = '0'; return }
-        //return
+
         this.#itemLandingOnPlayer(item, cellBottom)
 
         // клетки справа, для скатывания направо
-        let right = this.#getCellByCoord(row, col + 1)
-        //  document.querySelector(`.cell[data-row="${row}"][data-col="${col + 1}"]`);
-        let rightBottom = this.#getCellByCoord(row + 1, col + 1)
-        //document.querySelector(`.cell[data-row="${row + 1}"][data-col="${col + 1}"]`);
+        let right = document.querySelector(`.cell[data-row="${row}"][data-col="${col + 1}"]`);
+        let rightBottom = document.querySelector(`.cell[data-row="${row + 1}"][data-col="${col + 1}"]`);
         let rightSide = this.#isCellFree(right) && this.#isCellFree(rightBottom);
 
 
         // клетки слева, для скатывания налево
-        let left = this.#getCellByCoord(row, col - 1)
-        //document.querySelector(`.cell[data-row="${row}"][data-col="${col - 1}"]`);
-        let leftBottom = this.#getCellByCoord(row + 1, col - 1)
-        //document.querySelector(`.cell[data-row="${row + 1}"][data-col="${col - 1}"]`);
+        let left = document.querySelector(`.cell[data-row="${row}"][data-col="${col - 1}"]`);
+        let leftBottom = document.querySelector(`.cell[data-row="${row + 1}"][data-col="${col - 1}"]`);
         let leftSide = this.#isCellFree(left) && this.#isCellFree(leftBottom);
 
         // предмет лежит на другом предмете, т.е в клетке под предметом что-то есть, но не игрок
@@ -367,9 +325,6 @@ export class Game {
         else if (rightSide && hasCellBottomItem) fallStep(item, rightBottom);
         else if (leftSide && hasCellBottomItem) fallStep(item, leftBottom);
         else item.dataset.fall = '0';
-
-
-
     }
 
     /** Падение предмета на голову игрока
@@ -396,6 +351,8 @@ export class Game {
             this.#lootCollector(item);
         }
     }
+
+
 
     static #lootCollector(loot) {
         loot.remove()
@@ -437,9 +394,6 @@ export class Game {
         }
     }
 
-    static #getCellByCoord(row, col) {
-        return this.#cellsObj[`row_${row}#col_${col}`]
-    }
 
     /** Проверяет, что клетка существует и пуста, 
      * т.е у нее тип 'free' и в ней нет других предметов или игрока
@@ -475,6 +429,7 @@ export class Game {
      * @returns 
      */
     static #enemyAction(enemy, prevCell = null) {
+        // console.log(enemy)
         if (!enemy || !this.#enemiesArr.includes(enemy)) return;
 
         let currentCell = enemy.parentElement;
@@ -497,9 +452,7 @@ export class Game {
         }
         nextCell.append(enemy);
 
-        setTimeout(() => {
-                this.#enemyAction(enemy, currentCell)
-        }, 500);
+        setTimeout(() => this.#enemyAction(enemy, currentCell), 500);
     }
 
     /** Обычное поведение врага, когда игрок далеко.
@@ -655,7 +608,7 @@ export class Game {
         if (this.#player.parentElement === null) {
             setTimeout(() => {
                 this.#modalResult.querySelector('.next-level').style.display = 'none';
-
+                
                 this.#modalResult.querySelector('.modal-content').innerHTML = '<p>ВЫ ПРОИГРАЛИ!<br>ПОПРОБУЙТЕ ЕЩЕ РАЗ</p>';
                 this.#modalResult.classList.add('modal-show');
             }, 200);
