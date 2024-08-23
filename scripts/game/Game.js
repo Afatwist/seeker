@@ -498,6 +498,10 @@ export class Game {
         nextCell.append(enemy);
 
         setTimeout(() => {
+            if (this.#modalResult.classList.contains('modal-show') || this.#modalMap.classList.contains('modal-show')) {
+                enemy.dataset.walk = '0';
+                return
+            }
                 this.#enemyAction(enemy, currentCell)
         }, 500);
     }
