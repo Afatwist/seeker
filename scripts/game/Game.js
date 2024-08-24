@@ -29,6 +29,11 @@ export class Game {
      */
     static #itemsArr
 
+    /** Массив всех предметов (hurdle & loot) на поле
+     * @type {Array<Element>}
+    */
+    static #lootArr
+
     /** Массив врагов на поле
      * @type {Array<Element>}
      */
@@ -502,7 +507,7 @@ export class Game {
                 enemy.dataset.walk = '0';
                 return
             }
-                this.#enemyAction(enemy, currentCell)
+            this.#enemyAction(enemy, currentCell)
         }, 500);
     }
 
@@ -601,9 +606,27 @@ export class Game {
         for (let r = row - 1; r <= row + 1; r++) {
             for (let c = col - 1; c <= col + 1; c++) {
                 let cell = document.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
+
                 if (!cell) continue;
                 if (cell.classList.contains('none')) continue;
-                if (cell.hasChildNodes()) cell.removeChild(cell.firstChild);
+
+                if (cell.hasChildNodes()) {
+                    let child = cell.firstChild
+                    let childType = child.dataset.type;
+
+                    if (childType === 'loot' || childType === 'hurdle') {
+                        // this.#itemsArr.splice(this.#itemsArr.indexOf(item), 1);
+                        child.dataset.type = childType + '-remove';
+
+                    }
+                    else if (childType === 'enemy') {
+                        //console.log(child)
+
+                        // this.#enemyDie(child)
+                    }
+                    
+                    cell.removeChild(child);
+                }
 
                 cell.dataset.type = 'free';
                 cell.classList.remove('ground', 'wall')
@@ -614,7 +637,7 @@ export class Game {
                 }, 300);
             }
         }
-        this.#itemsArr.splice(this.#itemsArr.indexOf(item), 1);
+        this.#infoUpdate()
         this.#enemiesArr.splice(this.#enemiesArr.indexOf(enemy), 1);
     }
 
@@ -626,8 +649,8 @@ export class Game {
      */
     static #finishOpen() {
         // проверка наличия драгоценностей на поле
-        let loots = this.#itemsArr.every(item => item.dataset.type !== 'loot');
-        if (!loots) return
+        let loot = this.#itemsArr.find(item => item.dataset.type === 'loot');
+        if (loot) return
 
         let finish = document.querySelector('.finish-close');
         if (finish) {
@@ -640,9 +663,12 @@ export class Game {
     static #gameWin() {
         // если клетки финиша нет, то победа происходит после сбора всей добычи
         let lootsNotExists = this.#itemsArr.every(item => item.dataset.type !== 'loot')
+
+        console.log(this.#itemsArr, lootsNotExists)
         let finishCellNotExists = !(document.querySelector('.cell.finish-close') ||
             document.querySelector('.cell.finish-open'));
 
+        
         // проверка, что игрок зашел на клетку "финиш" и он открыт
         let finish = this.#player.parentElement?.classList.contains('finish-open')
         if (finish || (lootsNotExists && finishCellNotExists)) {
