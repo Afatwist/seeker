@@ -1,8 +1,8 @@
 // Импорт модулей
 import { LevelRender } from "../Classes/LevelRender.js";
 import { Level } from "../Classes/Level.js";
-import { Game } from "./Game.js";
 import { baseUrl } from "../Classes/Helpers.js";
+import { Game } from "./Game.js";
 
 // Получение данных игры из localStorage 
 const gameData = JSON.parse(localStorage.getItem('gameData'));
@@ -19,7 +19,9 @@ const { set_desc } = await import(
 LevelRender.setData(LEVEL, set_desc).make(true);
 
 // Игра
-Game.playing();
+ Game.playing();
+
+
 
 
 // Кнопки Верхнего меню и модального окна
