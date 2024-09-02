@@ -109,7 +109,7 @@ export class Game {
     // ############ ПОДГОТОВКА К ИГРЕ И ОБНОВЛЕНИЕ ИНФОРМАЦИИ ######
     /** Получение данных из DOM и настройки игры */
     static #prepare() {
-        this.#horizonDeep = 6;
+        this.#horizonDeep = 5;
         this.#player = document.getElementById('player');
         this.#board = document.getElementById('board');
 
