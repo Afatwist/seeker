@@ -1,5 +1,5 @@
 // !!! Оптимизировать скрипт перемещения игрока и поля
-// !!! методы победы и проигрыша поиск клетки финиша вынести в подготовку
+
 import { Cell } from "./Cell.js";
 import { Enemy } from "./Enemy.js";
 import { Item } from "./Item.js";
@@ -15,17 +15,22 @@ export class Game {
     static #horizonDeep
 
     /** Игрок
-     * @type {HTMLElement} 
+     * @type {HTMLDivElement} 
      */
     static #player
 
     /** Игровое поле
-     * @type {HTMLElement} 
+     * @type {HTMLDivElement}
      */
     static #board
 
-    /** Статус финиша
-     * @type {Element} 
+    /**
+     * @type {CSSStyleDeclaration}
+     */
+    static #boardStyle
+
+    /** Клетка финиш
+     * @type {HTMLDivElement || null} 
      */
     static #finish
 
@@ -49,29 +54,33 @@ export class Game {
      */
     static #startCoordinates
 
-    /** Координаты клетки
-     * @typedef {Object} CellCoordinates
-     * @property {number} row - Номер ряда
-     * @property {number} col - Номер колонки
+    /** Высота окна в пикселях. Алиас для Window.innerHeight
+     * @type {number}
      */
+    static #windowHight
+
+    /** Ширина окна в пикселях. Алиас для Window.innerWidth
+     * @type {number}
+     */
+    static #windowWidth
 
     /** Модальное окно с результатом
-    * @type {HTMLElement} 
+    * @type {HTMLDivElement} 
     */
     static #modalResult
 
-    /** Модальное окно с результатом
-     * @type {HTMLElement} 
+    /** Модальное окно с Картой уровня
+     * @type {HTMLDivElement} 
      */
     static #modalMap
 
     /** Блок Информации. Количество добычи на поле
-     * @type {Element}
+     * @type {HTMLSpanElement}
      */
     static #infoLootCount
 
     /** Блок Информации. Состояние финиша
-     * @type {Element}
+     * @type {HTMLSpanElement}
      */
     static #infoFinishStatus
 
@@ -84,7 +93,7 @@ export class Game {
         this.#infoUpdate();
 
         document.addEventListener('keydown', (e) => {
-            console.time('aaa')
+            
             const action = this.#actionCheck(e.code);
 
             if (action) {
@@ -93,16 +102,18 @@ export class Game {
 
                 this.#playerMover(playerCoords);
                 this.#boardMover(boardCoords);
-
+console.time('aaa')
                 this.#ITEM.actions();
                 this.#ENEMY.actions();
-
+console.timeEnd('aaa')
                 this.#finishOpen();
                 this.#infoUpdate();
                 this.#gameWin();
                 this.#gameOver();
+                
             }
-            console.timeEnd('aaa')
+            
+
         });
     }
 
@@ -117,8 +128,8 @@ export class Game {
             document.querySelector('.finish-open');
 
         this.#CELL = new Cell();
-        this.#ITEM = new Item(this.#CELL, this.#player);
-        this.#ENEMY = new Enemy(this.#CELL, this.#player);
+        this.#ITEM = new Item();
+        this.#ENEMY = new Enemy();
 
         this.#modalResult = document.getElementById('modal-result');
         this.#modalMap = document.getElementById('modal-level_map');
@@ -131,6 +142,10 @@ export class Game {
             top: startRect.top,
             left: startRect.left
         }
+
+        this.#windowHight = window.innerHeight;
+        this.#windowWidth = window.innerWidth;
+        this.#boardStyle = window.getComputedStyle(this.#board);
     }
 
     /** Обновление информационного блока в шапке игры */
@@ -153,12 +168,15 @@ export class Game {
     /** Определяет какая клавиша была нажата
      *  и возвращает игровое действие в зависимости от этого
      * 
+     *  При открытом модальном окне кнопки блокируются
+     * 
      * @param {string} key KeyboardEvent.code
-     * @returns {false | "down" | "up" | "left" | "right"}
+     * @returns {"up" | "down" | "left" | "right" | false }
      */
     static #actionCheck(key) {
         if (this.#modalResult.classList.contains('modal-show')) return false;
         if (this.#modalMap.classList.contains('modal-show')) return false;
+
         switch (key) {
             case 'KeyW': case 'ArrowUp': return 'up';
             case 'KeyS': case 'ArrowDown': return 'down';
@@ -224,34 +242,33 @@ export class Game {
     static #playerMover(playerCoords) {
         const { playerC, stoneC } = playerCoords;
 
-        let cell = document.querySelector(`.cell[data-row="${playerC.row}"][data-col="${playerC.col}"]`)
+        let cell = this.#CELL.getOne(playerC.row, playerC.col);
 
         if (cell) {
             if (cell.hasChildNodes()) {
                 // клетки с предметами
                 /** предмет в клетке */
-                const item = cell.children[0]
+                const item = cell.children[0];
 
                 // Клетки с сокровищем
                 if (item.dataset.type === 'loot') {
-                    this.#ITEM.lootCollector(item)
-                    cell.append(this.#player)
+                    this.#ITEM.lootCollector(item);
+                    cell.append(this.#player);
                 }
 
                 // Клетки с камнями
                 if (item.dataset.type === 'hurdle') {
-
-                    let cellNext = document.querySelector(`.cell[data-row="${stoneC.row}"][data-col="${stoneC.col}"]`)
+                    let cellNext = this.#CELL.getOne(stoneC.row, stoneC.col);
 
                     if (this.#CELL.isFree(cellNext)) {
                         // камень можно подвинуть на пустую клетку
-                        cellNext.append(item)
-                        cell.append(this.#player)
+                        cellNext.append(item);
+                        cell.append(this.#player);
                     } else {
                         // камень невозможно сдвинуть
-                        cell.classList.add('item-not-moving')
+                        cell.classList.add('item-not-moving');
                         setTimeout(() => {
-                            cell.classList.remove('item-not-moving')
+                            cell.classList.remove('item-not-moving');
                         }, 700);
                     }
                 }
@@ -259,14 +276,14 @@ export class Game {
 
             // Пустая клетка
             if (this.#CELL.isFree(cell)) {
-                cell.append(this.#player)
+                cell.append(this.#player);
             }
 
             // Клетка с "Землей"
             if (cell.dataset.type === 'ground') {
-                cell.classList.replace('ground', 'free')
-                cell.append(this.#player)
-                cell.dataset.type = 'free'
+                cell.classList.replace('ground', 'free');
+                cell.append(this.#player);
+                cell.dataset.type = 'free';
             }
 
             // Клетка-Стена
@@ -277,21 +294,23 @@ export class Game {
                 }, 700);
             }
 
+            // Клетка Старт
             if (cell.dataset.type === 'start') {
                 cell.append(this.#player);
             }
 
+            // Клетка Финиш-открыт
             if (cell.dataset.type === 'finish-open') {
                 cell.append(this.#player);
             }
 
+            // Клетка Финиш-закрыт
             if (cell.dataset.type === 'finish-close') {
                 cell.classList.add('wall-border-red')
                 setTimeout(() => {
                     cell.classList.remove('wall-border-red')
                 }, 700);
             }
-
         }
     }
 
@@ -300,17 +319,17 @@ export class Game {
      * @param {obj} boardCoords - текущее расположение игровой доски и направление движения игрока
      */
     static #boardMover(boardCoords) {
-        const { boardC, horizonC } = boardCoords
+        const { boardC, horizonC } = boardCoords;
 
-        let horizonCell = document.querySelector(`.cell[data-row="${horizonC.row}"][data-col="${horizonC.col}"]`)
+        let horizonCell = this.#CELL.getOne(horizonC.row, horizonC.col);
 
         if (horizonCell) {
             let rect = horizonCell.getBoundingClientRect()
 
             let isVisible = rect.top >= this.#startCoordinates.top &&
                 rect.left >= this.#startCoordinates.left &&
-                rect.bottom <= window.innerHeight &&
-                rect.right <= window.innerWidth
+                rect.bottom <= this.#windowHight &&
+                rect.right <= this.#windowWidth
 
             // сдвигание поля в нужную сторону
             if (!isVisible) {
@@ -320,28 +339,29 @@ export class Game {
         }
     }
 
+    /** Получить текущее положение игрового поля
+     * 
+     * @returns {{ top: number, left: number }}
+     */
     static #getBoardPosition() {
-        const style = window.getComputedStyle(this.#board)
         return {
-            top: parseInt(style.getPropertyValue('top')),
-            left: parseInt(style.getPropertyValue('left'))
+            top: parseInt(this.#boardStyle.getPropertyValue('top')),
+            left: parseInt(this.#boardStyle.getPropertyValue('left'))
         }
     }
 
     /** Возвращает координаты клетки игрока
      * 
-     * @returns {CellCoordinates}
+     * @returns {{ row: number, col: number }}
      * - координаты клетки с игроком
-    */
+     */
     static #getPlayerCoord() {
         // if (!this.#player.parentElement) return false;
         return this.#CELL.getCoordinates(this.#player.parentElement)
     }
 
-    //#####################################//
-    //##### Методы при окончании игры #####//
-    //#####################################//
 
+    // ############## МЕТОДЫ ПРИ ОКОНЧАНИИ ИГРЫ ###########
     /** Если собраны все сокровища, открывает клетку финиша для выхода из уровня
      */
     static #finishOpen() {

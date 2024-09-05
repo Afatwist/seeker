@@ -1,23 +1,33 @@
 import { Cell } from "./Cell.js";
+import { Item } from "./Item.js";
 
 export class Enemy {
+    /** Все противники на поле
+     * @type {Array<Element>}
+     */
     all
 
     /**
      * @type {Cell}
      */
     #CELL
+
+    /** Игрок
+     * @type {HTMLDivElement}
+     */
     #player
 
+    #ITEM
     /**
-     * 
-     * @param {Cell} cell 
+     * @param {Cell} cell - класс клеток
+     * @param {HTMLDivElement} player - игрок на поле 
      */
-    constructor(cell, player) {
+    constructor() {
         this.all = Array.from(document.querySelectorAll("[data-type='enemy']"));
-        this.#CELL = cell;
-        this.#player = player;
 
+        this.#player = document.getElementById('player');
+        this.#CELL = new Cell();
+        this.#ITEM = new Item()
     }
 
     actions() {
@@ -169,19 +179,22 @@ export class Enemy {
                 if (cell.hasChildNodes()) {
                     let child = cell.firstChild
                     let childType = child.dataset.type;
-
-                    if (childType === 'loot' || childType === 'hurdle') {
+                    if(childType === 'loot') {
+                        this.#ITEM.lootCollector(child)
+                    }
+                    if (childType === 'hurdle') {
                         // this.#itemsArr.splice(this.#itemsArr.indexOf(item), 1);
-                        child.dataset.type = childType + '-remove';
+                        child.dataset.type = childType + '-remove'; 
+                        cell.removeChild(child);
 
                     }
                     else if (childType === 'enemy') {
-                        //console.log(child)
+                        // console.log(child)
 
                         // this.#enemyDie(child)
                     }
 
-                    cell.removeChild(child);
+                    
                 }
 
                 cell.dataset.type = 'free';
@@ -193,8 +206,9 @@ export class Enemy {
                 }, 300);
             }
         }
-        //this.#infoUpdate()
         this.all.splice(this.all.indexOf(enemy), 1);
+        enemy.remove();
+        // console.log(enemy, this.all)
     }
 
 

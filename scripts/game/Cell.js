@@ -2,14 +2,15 @@
  * @class Cell
  */
 export class Cell {
-    /** Экземпляр класса Cell, для единственного экземпляра во всем приложении
+    /** Экземпляр класса Cell,
+     * для единственного экземпляра во всем приложении
      * (паттерн Singleton)
      * @type {Cell}
      */
     static #instance
 
     /** Все клетки на игровом поле
-     * @type {NodeListOf<Element>}
+     * @type {NodeListOf<HTMLDivElement>}
      */
     #all
 
@@ -79,6 +80,16 @@ export class Cell {
         if (cell.hasChildNodes()) return false
 
         return true
+    }
+
+    /** Возвращает предмет в клетке если он есть
+     * 
+     * @param {Element | null} cell 
+     * @returns {HTMLDivElement | false}
+     */
+    innerItem(cell) {
+        if (cell.hasChildNodes()) return cell.childNodes[0]
+        return false
     }
 
 
