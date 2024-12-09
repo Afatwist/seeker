@@ -1,8 +1,6 @@
 import { CellModel } from "../Models/CellModel.js";
 
-/** Список всех клеток на поле
- * 
- */
+/** Список всех клеток на поле */
 export class CellList {
 
     /** Полный список всех клеток на поле
@@ -84,8 +82,7 @@ export class CellList {
         ].filter(cell => cell instanceof CellModel);
     }
 
-    /** 
-     * Возвращает предмет на поле по указанным координатам если он есть
+    /** Возвращает предмет на поле по указанным координатам если он есть
      * !!! удалить
      * @param {number | string} row
      * @param {number | string} col
@@ -119,9 +116,8 @@ export class CellList {
             let child = cell.element.children[0]
 
             if (item !== child) {
-                console.error('ошибка в клетке', cell)
+                console.error('ошибка в клетке', cell, 'предмет', item, 'html-элемент в клетке', child)
             }
         })
     }
-
 }
