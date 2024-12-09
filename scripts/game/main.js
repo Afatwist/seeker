@@ -19,10 +19,7 @@ const { set_desc } = await import(
 LevelRender.setData(LEVEL, set_desc).make(true);
 
 // Игра
- Game.playing();
-
-
-
+Game.playing();
 
 // Кнопки Верхнего меню и модального окна
 /** если переход был из конструктора, появляется кнопка и позволяет вернуться обратно */
@@ -38,7 +35,6 @@ document.querySelectorAll('.to-constructor').forEach(btn => {
     }
 });
 
-
 /** кнопка "Начать заново" */
 document.querySelectorAll('.replay').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -53,9 +49,7 @@ document.querySelectorAll('.level-list').forEach(btn => {
         btn.addEventListener('click', () => {
             window.open('../pages/file-choose.html', '_self');
         });
-    } else {
-        btn.style.display = 'none';
-    }
+    } else btn.style.display = 'none';
 })
 
 /** кнопка "На главную страницу" */
@@ -65,10 +59,7 @@ document.querySelectorAll('.to-main-page').forEach(btn => {
         btn.addEventListener('click', () => {
             window.open(baseUrl, '_self');
         })
-    } else {
-        btn.style.display = 'none';
-    }
-
+    } else btn.style.display = 'none';
 })
 
 /** если это не последний существующий уровень, то в модальном окне появится кнопка перехода на следующий уровень */
@@ -80,14 +71,14 @@ if (Level.count > LEVEL.id) {
         localStorage.setItem("gameData", JSON.stringify(levelData));
         location.reload();
     });
-} else {
-    btnNextLevel.style.display = 'none';
-}
+} else btnNextLevel.style.display = 'none';
+
 
 /** кнопка "Показать карту уровня" и модальное окно */
 const levelMap = document.getElementById('modal-level_map');
 
 document.querySelector('.show-level-map').addEventListener('click', () => {
+    Game.pause = true;
     levelMap.classList.add('modal-show');
     levelMap.addEventListener('click', modalClose);
     document.addEventListener('keydown', modalClose);
@@ -98,6 +89,7 @@ document.querySelector('.show-level-map').addEventListener('click', () => {
 function modalClose(e) {
     if (e.code === 'Escape' ||
         e.target.classList.contains('modal-close_map')) {
+        Game.pause = false;
         levelMap.classList.remove('modal-show');
         levelMap.removeEventListener('click', modalClose);
         document.removeEventListener('keydown', modalClose);

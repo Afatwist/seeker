@@ -1,8 +1,16 @@
 // !!! Оптимизировать скрипт перемещения игрока и поля
+//  Добавить подсчет сделанных ходов
+//  Добавить режим паузы при открытом модальном окне
+//  сделать интерактивную карту а не из скриншота.
 
-import { Cell } from "./Cell.js";
-import { Enemy } from "./Enemy.js";
-import { Item } from "./Item.js";
+
+import { PlayerModel as Player } from "../Classes/Models/PlayerModel.js";
+import { EnemyList } from "../Classes/Lists/EnemyList.js";
+import { CellList } from "../Classes/Lists/CellList.js";
+import { LootList } from "../Classes/Lists/LootList.js";
+import { StoneList } from "../Classes/Lists/StoneList.js";
+import { GameInfo } from "./GameInfo.js";
+import { ListsActivator } from "../Classes/Lists/HelperForList.js";
 
 
 /** Логика игры
@@ -14,11 +22,6 @@ export class Game {
      */
     static #horizonDeep
 
-    /** Игрок
-     * @type {HTMLDivElement} 
-     */
-    static #player
-
     /** Игровое поле
      * @type {HTMLDivElement}
      */
@@ -28,26 +31,6 @@ export class Game {
      * @type {CSSStyleDeclaration}
      */
     static #boardStyle
-
-    /** Клетка финиш
-     * @type {HTMLDivElement || null} 
-     */
-    static #finish
-
-    /** Все клетки на поле
-     * @type {Cell}
-     */
-    static #CELL
-
-    /** Все предметы на поле
-     * @type {Item}
-     */
-    static #ITEM
-
-    /** Все враги на поле
-     * @type {Enemy}
-     */
-    static #ENEMY
 
     /** Начальные координаты поля
      * @type {{top: number, left: number}}
@@ -69,51 +52,36 @@ export class Game {
     */
     static #modalResult
 
-    /** Модальное окно с Картой уровня
-     * @type {HTMLDivElement} 
+    /** Устанавливает паузу в игре
+     * @type {boolean}
      */
-    static #modalMap
-
-    /** Блок Информации. Количество добычи на поле
-     * @type {HTMLSpanElement}
-     */
-    static #infoLootCount
-
-    /** Блок Информации. Состояние финиша
-     * @type {HTMLSpanElement}
-     */
-    static #infoFinishStatus
+    static pause = false;
 
     // ############################################
 
     /** Игровой процесс */
     static playing() {
-
         this.#prepare();
-        this.#infoUpdate();
+        GameInfo.update();
 
         document.addEventListener('keydown', (e) => {
-            
+            this.#gameOver();
             const action = this.#actionCheck(e.code);
-
-            if (action) {
+            if (action && Player.alive && !Game.pause) {
 
                 const { playerCoords, boardCoords } = this.#newCoordinates(action);
 
-                this.#playerMover(playerCoords);
+                Player.goTo(playerCoords);
                 this.#boardMover(boardCoords);
-console.time('aaa')
-                this.#ITEM.actions();
-                this.#ENEMY.actions();
-console.timeEnd('aaa')
+
+                // console.time('aaa');
                 this.#finishOpen();
-                this.#infoUpdate();
+                ListsActivator();
+                // console.timeEnd('aaa');
+
                 this.#gameWin();
                 this.#gameOver();
-                
             }
-            
-
         });
     }
 
@@ -121,20 +89,17 @@ console.timeEnd('aaa')
     /** Получение данных из DOM и настройки игры */
     static #prepare() {
         this.#horizonDeep = 5;
-        this.#player = document.getElementById('player');
         this.#board = document.getElementById('board');
 
-        this.#finish = document.querySelector('.finish-close') ||
-            document.querySelector('.finish-open');
 
-        this.#CELL = new Cell();
-        this.#ITEM = new Item();
-        this.#ENEMY = new Enemy();
+        Player.init();
+        EnemyList.makeList();
+        LootList.makeList();
+        StoneList.makeList();
+        GameInfo.init();
+
 
         this.#modalResult = document.getElementById('modal-result');
-        this.#modalMap = document.getElementById('modal-level_map');
-        this.#infoLootCount = document.querySelector('.loot-count');
-        this.#infoFinishStatus = document.querySelector('.finish-status');
 
         // Начальные координаты поля
         const startRect = this.#board.getBoundingClientRect();
@@ -148,23 +113,7 @@ console.timeEnd('aaa')
         this.#boardStyle = window.getComputedStyle(this.#board);
     }
 
-    /** Обновление информационного блока в шапке игры */
-    static #infoUpdate() {
-        // количество добычи, оставшееся на поле
-        this.#infoLootCount.textContent = this.#ITEM.lootCount;
 
-        // состояние клетки финиша
-        let status = this.#finish?.dataset.type;
-        let info = '';
-
-        if (status === 'finish-close') info = 'Финиш закрыт';
-        else if (status === 'finish-open') info = 'Финиш открыт';
-        else info = 'Игра без Финиша, просто соберите всю добычу';
-
-        this.#infoFinishStatus.textContent = info;
-    }
-
-    // ############ ОБРАБОТКА НАЖАТИЯ КНОПОК И ПЕРЕМЕЩЕНИЕ ИГРОКА ######
     /** Определяет какая клавиша была нажата
      *  и возвращает игровое действие в зависимости от этого
      * 
@@ -174,9 +123,6 @@ console.timeEnd('aaa')
      * @returns {"up" | "down" | "left" | "right" | false }
      */
     static #actionCheck(key) {
-        if (this.#modalResult.classList.contains('modal-show')) return false;
-        if (this.#modalMap.classList.contains('modal-show')) return false;
-
         switch (key) {
             case 'KeyW': case 'ArrowUp': return 'up';
             case 'KeyS': case 'ArrowDown': return 'down';
@@ -195,11 +141,11 @@ console.timeEnd('aaa')
     static #newCoordinates(action) {
 
         // координаты для перемещения игрока
-        let playerC = this.#getPlayerCoord();
-        let stoneC = this.#getPlayerCoord();
+        let playerC = Player.getCoordinates();
+        let stoneC = Player.getCoordinates();
 
         // координаты для перемещения игрового поля
-        let horizonC = this.#getPlayerCoord();
+        let horizonC = Player.getCoordinates();
         let boardC = this.#getBoardPosition();
 
         switch (action) {
@@ -235,85 +181,6 @@ console.timeEnd('aaa')
         }
     }
 
-    /** Перемещение игрока в новую клетку
-     * 
-     * @param {*}  фишка игрока
-     */
-    static #playerMover(playerCoords) {
-        const { playerC, stoneC } = playerCoords;
-
-        let cell = this.#CELL.getOne(playerC.row, playerC.col);
-
-        if (cell) {
-            if (cell.hasChildNodes()) {
-                // клетки с предметами
-                /** предмет в клетке */
-                const item = cell.children[0];
-
-                // Клетки с сокровищем
-                if (item.dataset.type === 'loot') {
-                    this.#ITEM.lootCollector(item);
-                    cell.append(this.#player);
-                }
-
-                // Клетки с камнями
-                if (item.dataset.type === 'hurdle') {
-                    let cellNext = this.#CELL.getOne(stoneC.row, stoneC.col);
-
-                    if (this.#CELL.isFree(cellNext)) {
-                        // камень можно подвинуть на пустую клетку
-                        cellNext.append(item);
-                        cell.append(this.#player);
-                    } else {
-                        // камень невозможно сдвинуть
-                        cell.classList.add('item-not-moving');
-                        setTimeout(() => {
-                            cell.classList.remove('item-not-moving');
-                        }, 700);
-                    }
-                }
-            }
-
-            // Пустая клетка
-            if (this.#CELL.isFree(cell)) {
-                cell.append(this.#player);
-            }
-
-            // Клетка с "Землей"
-            if (cell.dataset.type === 'ground') {
-                cell.classList.replace('ground', 'free');
-                cell.append(this.#player);
-                cell.dataset.type = 'free';
-            }
-
-            // Клетка-Стена
-            if (cell.dataset.type === 'wall') {
-                cell.classList.add('wall-border-red')
-                setTimeout(() => {
-                    cell.classList.remove('wall-border-red')
-                }, 700);
-            }
-
-            // Клетка Старт
-            if (cell.dataset.type === 'start') {
-                cell.append(this.#player);
-            }
-
-            // Клетка Финиш-открыт
-            if (cell.dataset.type === 'finish-open') {
-                cell.append(this.#player);
-            }
-
-            // Клетка Финиш-закрыт
-            if (cell.dataset.type === 'finish-close') {
-                cell.classList.add('wall-border-red')
-                setTimeout(() => {
-                    cell.classList.remove('wall-border-red')
-                }, 700);
-            }
-        }
-    }
-
     /** Перемещение игровой доски, при приближении игрока к краю зоны видимости
      * 
      * @param {obj} boardCoords - текущее расположение игровой доски и направление движения игрока
@@ -321,10 +188,10 @@ console.timeEnd('aaa')
     static #boardMover(boardCoords) {
         const { boardC, horizonC } = boardCoords;
 
-        let horizonCell = this.#CELL.getOne(horizonC.row, horizonC.col);
+        let horizonCell = CellList.getOne(horizonC.row, horizonC.col);
 
         if (horizonCell) {
-            let rect = horizonCell.getBoundingClientRect()
+            let rect = horizonCell.element.getBoundingClientRect()
 
             let isVisible = rect.top >= this.#startCoordinates.top &&
                 rect.left >= this.#startCoordinates.left &&
@@ -350,46 +217,36 @@ console.timeEnd('aaa')
         }
     }
 
-    /** Возвращает координаты клетки игрока
-     * 
-     * @returns {{ row: number, col: number }}
-     * - координаты клетки с игроком
-     */
-    static #getPlayerCoord() {
-        // if (!this.#player.parentElement) return false;
-        return this.#CELL.getCoordinates(this.#player.parentElement)
-    }
-
 
     // ############## МЕТОДЫ ПРИ ОКОНЧАНИИ ИГРЫ ###########
     /** Если собраны все сокровища, открывает клетку финиша для выхода из уровня
      */
     static #finishOpen() {
         // проверка наличия драгоценностей на поле
-        if (this.#ITEM.lootCount > 0) return;
+        if (LootList.getCounter().map > 0) return;
 
-        if (this.#finish?.dataset.type === 'finish-close') {
-            this.#finish.classList.replace('finish-close', 'finish-open');
-            this.#finish.dataset.type = 'finish-open';
+        if (GameInfo.finish?.type === 'finish-close') {
+            GameInfo.finish.classReplace(['finish-close'], ['finish-open']);
+            GameInfo.finish.type = 'finish-open';
         }
     }
 
     /** При победе на уровне */
     static #gameWin() {
-        // проверка, что игрок зашел на клетку "финиш" и он открыт
-        let finishOpen = this.#player.parentElement?.classList.contains('finish-open');
-        if (finishOpen || (this.#ITEM.lootCount === 0 && !this.#finish)) {
+        if (Player.cell.type === 'finish-open' ||
+            (LootList.getCounter().map === 0 && !GameInfo.finish)) {
+            Game.pause = true;
             setTimeout(() => {
                 this.#modalResult.querySelector('.modal-content').innerHTML = '<p>ВЫ ВЫИГРАЛИ!</p>';
                 this.#modalResult.classList.add('modal-show');
-
             }, 200);
         }
     }
 
     /** При проигрыше на уровне */
     static #gameOver() {
-        if (this.#player.parentElement === null) {
+        if (!Player.alive) {
+            Game.pause = true;
             setTimeout(() => {
                 this.#modalResult.querySelector('.next-level').style.display = 'none';
 

@@ -1,27 +1,37 @@
 import { Level } from "./Level.js";
+import { CellList } from "./Lists/CellList.js";
 
-
-/** Создание игрового поля по заданным размерам
- * @class LevelRender
+/** Генерирование игрового поля из Объекта с данными.
+ * 
+ * Создание списков с объектами поле. 
  */
 export class LevelRender {
 
-    /** Объект с размерами поля: { "rows": num, "cols": num}
-     * @type {obj}
+    /** Размеры поля
+     * @type {{
+     * rows: number,
+     * cols: number
+     * }}
      */
-    static #boardSize; //: {obj:{ "rows": num, "cols": num }}
+    static #boardSize;
 
     /** Массив со списком объектов, каждый объект - данные о клетке
     * @type {array<obj>}
     */
     static #boardData;
 
+    /** Название уровня
+     * @type {string}
+     */
     static #levelTitle;
 
-    static #id 
+    /** ID текущего уровня
+     * @type {number}
+     */
+    static #id
 
-    /** 
-     * @property {string} название набора графики для текущего уровня
+    /** Название набора графики для текущего уровня
+     * @type {string} 
      */
     static #graphics_set;
 
@@ -30,8 +40,8 @@ export class LevelRender {
 
     /** Устанавливает данные о текущем уровне
      * 
-     * @param {typeof Level} levelData данные о размере поля и клетках
-     * @returns {typeof LevelRender} экземпляр класса
+     * @param {Level} levelData данные о размере поля и клетках
+     * @returns {LevelRender} экземпляр класса
      */
     static setData(levelData, set_description = false) {
         this.#id = levelData.id;
@@ -58,11 +68,13 @@ export class LevelRender {
             for (let c = 1; c <= this.#boardSize.cols; c++) {
 
                 let cell = this.#cellRender(r, c);
+                CellList.set(cell); // добавление клетки в список
                 row.append(cell);
 
             }
             board.append(row);
         }
+
         this.#setGraphicsSetStyle(isGame);
 
         if (isGame) {
