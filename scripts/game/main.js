@@ -76,14 +76,28 @@ if (Level.count > LEVEL.id) {
 
 /** кнопка "Показать карту уровня" и модальное окно */
 const levelMap = document.getElementById('modal-level_map');
-
+const cover = document.querySelector('.modal-img_map');
+const board = document.querySelector('.board');
+/**
+ * @type {HTMLSpanElement}
+ */
+const loader = document.querySelector('.modal-loader_map');
 document.querySelector('.show-level-map').addEventListener('click', () => {
+
+    html2canvas(board).
+        then(canvas => {
+            cover.src = `${canvas.toDataURL('image/png')}`;
+            cover.style.display = 'block';
+            loader.style.display = 'none';
+
+        });
+
     Game.pause = true;
     levelMap.classList.add('modal-show');
+
     levelMap.addEventListener('click', modalClose);
     document.addEventListener('keydown', modalClose);
 });
-
 
 /** закрытие модального окна по нажатию на кнопку "Закрыть" или на клавишу Esc */
 function modalClose(e) {
@@ -91,7 +105,12 @@ function modalClose(e) {
         e.target.classList.contains('modal-close_map')) {
         Game.pause = false;
         levelMap.classList.remove('modal-show');
+
         levelMap.removeEventListener('click', modalClose);
         document.removeEventListener('keydown', modalClose);
+
+        cover.src = '';
+        cover.style.display = 'none';
+        loader.style.display = 'inline-block';
     }
 }

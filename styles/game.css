@@ -244,8 +244,31 @@ body {
     width: 100%;
     height: 100%;
     object-fit: scale-down;
+    display: none;
 }
 
 .modal-close_map {
     position: absolute;
+}
+
+.modal-loader_map {
+    width: 150px;
+    height: 150px;
+    margin-top: 45vh;
+    margin-left: 45vw;
+    border: 15px solid #6ebeff;
+    border-bottom-color: #337AB7;
+    border-radius: 50%;
+    display: block;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }

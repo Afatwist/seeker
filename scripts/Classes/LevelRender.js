@@ -98,8 +98,8 @@ export class LevelRender {
             }
 
             // добавление карты уровня
-            let cover = document.querySelector('.modal-img_map');
-            cover.src = `../sources/levels/cover/${this.#id}.png`;
+            // let cover = document.querySelector('.modal-img_map');
+            // cover.src = `../sources/levels/cover/${this.#id}.png`;
         }
     }
 
