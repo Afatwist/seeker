@@ -92,10 +92,6 @@ export class Game {
         this.#board = document.getElementById('board');
 
 
-        Player.init();
-        EnemyList.makeList();
-        LootList.makeList();
-        StoneList.makeList();
         GameInfo.init();
 
 
@@ -112,7 +108,6 @@ export class Game {
         this.#windowWidth = window.innerWidth;
         this.#boardStyle = window.getComputedStyle(this.#board);
     }
-
 
     /** Определяет какая клавиша была нажата
      *  и возвращает игровое действие в зависимости от этого
@@ -225,16 +220,16 @@ export class Game {
         // проверка наличия драгоценностей на поле
         if (LootList.getCounter().map > 0) return;
 
-        if (GameInfo.finish?.type === 'finish-close') {
-            GameInfo.finish.classReplace(['finish-close'], ['finish-open']);
-            GameInfo.finish.type = 'finish-open';
+        if (CellList.finish?.type === 'finish-close') {
+            CellList.finish.classReplace(['finish-close'], ['finish-open']);
+            CellList.finish.type = 'finish-open';
         }
     }
 
     /** При победе на уровне */
     static #gameWin() {
         if (Player.cell.type === 'finish-open' ||
-            (LootList.getCounter().map === 0 && !GameInfo.finish)) {
+            (LootList.getCounter().map === 0 && !CellList.finish)) {
             Game.pause = true;
             setTimeout(() => {
                 this.#modalResult.querySelector('.modal-content').innerHTML = '<p>ВЫ ВЫИГРАЛИ!</p>';

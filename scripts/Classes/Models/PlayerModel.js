@@ -31,19 +31,19 @@ export class PlayerModel {
      */
     static col
 
-    /** Инициализация фишки игрока */
-    static init() {
-        if (!this.element) {
-            this.element = document.getElementById('player');
+    /** Инициализация фишки игрока
+     * @param {CellModel} cellModel 
+     */
+    static init(cellModel) {
+        this.element = document.createElement('div');
+        this.element.classList.add('item', 'player');
 
 
-            let parentCellData = this.element.parentElement.dataset;
+        this.cell = cellModel;
+        cellModel.itemSet(this);
 
-            this.cell = CellList.getOne(parentCellData.row, parentCellData.col);
-            this.cell.item = this // !!! временное решение
-            this.row = this.cell.row;
-            this.col = this.cell.col;
-        }
+        this.row = this.cell.row;
+        this.col = this.cell.col;
     }
 
     //###########################################################################

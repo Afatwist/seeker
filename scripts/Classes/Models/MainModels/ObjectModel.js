@@ -26,12 +26,18 @@ export class ObjectModel extends MainModel {
      * @param {number | string} id 
      */
     constructor(element, id) {
-        super(element, id)
+        super(element, id);
+    }
 
-        let { row, col } = element.parentElement.dataset;
-        this.cell = CellList.getOne(row, col);
-
-        this.cell.item = this;
+    /** Начальная инициализация клетки
+     * 
+     * @param {CellModel} cell 
+     */
+    cellInit(cell) {
+        if (!this.cell) {
+            this.cell = cell;
+            cell.itemSet(this);
+        }
     }
 
     /** Получить координаты предмета

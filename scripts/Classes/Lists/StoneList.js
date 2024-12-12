@@ -15,19 +15,14 @@ export class StoneList {
      */
     static #counter = 0
 
-    /** Создать список добычи */
-    static makeList() {
-        Array.from(document.querySelectorAll("[data-type='hurdle']")).reverse().forEach(hurdle => {
-            this.#set(hurdle)
-        });
-    }
 
     /** Добавить добычу в список
      * 
-     * @param {Element} stone
+     * @param {HTMLDivElement} stone
+     * @param {CellModel} cell 
      */
-    static #set(stone) {
-        const item = new StoneModel(stone, this.#counter);
+    static set(stone, cell) {
+        const item = new StoneModel(stone, this.#counter, cell);
         this.#all.set(item.id, item);
         this.#counter++
     }

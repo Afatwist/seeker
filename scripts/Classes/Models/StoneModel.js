@@ -16,11 +16,13 @@ export class StoneModel extends FallingModel {
     list = 'stone';
 
     /**
-     * @param {HTMLDivElement} element 
+     * @param {HTMLDivElement} stone 
      * @param {number} id 
      */
-    constructor(element, id) {
-        super(element, id, 120);
+    constructor(stone, id, cell) {
+        super(stone, id, 120);
+        this.cellInit(cell);
+
     }
 
     /** Падение предметов */

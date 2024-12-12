@@ -41,9 +41,11 @@ export class EnemyModel extends ObjectModel {
     /**  
      * @param {HTMLDivElement} enemy 
      * @param {number} id 
+     * @param {CellModel} cell 
      */
-    constructor(enemy, id) {
+    constructor(enemy, id, cell) {
         super(enemy, id);
+        this.cellInit(cell);
 
         this.active = false;
         this.previousCell = null;

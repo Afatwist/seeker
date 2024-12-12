@@ -1,5 +1,10 @@
 import { Level } from "./Level.js";
 import { CellList } from "./Lists/CellList.js";
+import { EnemyList } from "./Lists/EnemyList.js";
+import { LootList } from "./Lists/LootList.js";
+import { StoneList } from "./Lists/StoneList.js";
+import { CellModel } from "./Models/CellModel.js";
+import { PlayerModel as Player } from "./Models/PlayerModel.js";
 
 /** Генерирование игрового поля из Объекта с данными.
  * 
@@ -41,6 +46,7 @@ export class LevelRender {
     /** Устанавливает данные о текущем уровне
      * 
      * @param {Level} levelData данные о размере поля и клетках
+     * @param {boolean} [set_description=false] 
      * @returns {LevelRender} экземпляр класса
      */
     static setData(levelData, set_description = false) {
@@ -61,14 +67,23 @@ export class LevelRender {
      */
     static make(isGame = false) {
         const board = document.getElementById('board');
-        const game = document.getElementById('game');
 
         for (let r = 1; r <= this.#boardSize.rows; r++) {
             let row = this.#rowRender(r);
             for (let c = 1; c <= this.#boardSize.cols; c++) {
 
-                let cell = this.#cellRender(r, c);
-                CellList.set(cell); // добавление клетки в список
+
+                let data = this.#getCellData(r, c);
+                data.row = r;
+                data.col = c;
+
+                let cell = this.#cellRender(data);
+                let cellModel = CellList.set(cell, r, c); // добавление клетки в список
+
+                if (data.item) this.#itemRender(data.item, cellModel);
+
+                if (cellModel.type === 'start' && isGame) Player.init(cellModel);
+
                 row.append(cell);
 
             }
@@ -78,7 +93,7 @@ export class LevelRender {
         this.#setGraphicsSetStyle(isGame);
 
         if (isGame) {
-            this.#addPlayer();
+            const game = document.getElementById('game');
 
             document.querySelector('.level-title').textContent = this.#levelTitle;
 
@@ -96,10 +111,6 @@ export class LevelRender {
             } else if (boardW < gameW) {
                 game.classList.add('game-center', 'game-center-vertical');
             }
-
-            // добавление карты уровня
-            // let cover = document.querySelector('.modal-img_map');
-            // cover.src = `../sources/levels/cover/${this.#id}.png`;
         }
     }
 
@@ -113,33 +124,19 @@ export class LevelRender {
         document.head.append(css);
     }
 
-    /** Добавляет фишку игрока на игровое поле */
-    static #addPlayer() {
-        let player = document.createElement('div');
-        player.classList.add('item', 'player');
-        player.id = 'player';
-        document.querySelector('.cell.start').append(player);
-    }
-
     /** Генерирует клетку на игровом поле
      * 
      * @param {number} row - номер ряда
      * @param {number} col - номер колонки
      * @returns {HTMLDivElement}
      */
-    static #cellRender(row, col) {
+    static #cellRender(data) {
         let cell = document.createElement('div');
-        let data = this.#getCellData(row, col);
 
-        // this.#addCellDataset(data.cell.type);
         cell.classList.add(...data.cell.class);
         cell.dataset.type = data.cell.type;
-        cell.dataset.row = row;
-        cell.dataset.col = col;
 
-        if (data.item) cell.append(this.#itemRender(data.item))
-
-        return cell
+        return cell;
     }
 
     /** Генерирует ряд на игровом поле
@@ -174,36 +171,34 @@ export class LevelRender {
         return { cell, item }
     }
 
-    /** Добавляет атрибуты dataset
-     * из файла описания графического набора
-     * к клеткам и предметам на поле */
-    /*   static #addCellDataset(cellType) {
-         let test = this.#set_description.items.type.set.filter(item => item.type === cellType)[0]
-         
-          console.log(test)
-          return this;
-  
-      } */
-
     /** Генерирует предмет для текущей клетки
      * 
      * @param {{  }} itemData - характеристики предмета
+     * @param {CellModel} cellModel клетка предмета
      * @returns {HTMLDivElement}
      */
-    static #itemRender(itemData) {
+    static #itemRender(itemData, cellModel) {
         let item = document.createElement('div');
 
         item.classList.add(...itemData.class);
         item.dataset.type = itemData.type;
 
-        if (['loot', 'hurdle'].includes(itemData.type)) {
-            item.dataset.fall = 0;
-        }
+        switch (itemData.type) {
+            case 'enemy':
+                EnemyList.set(item, cellModel);
+                break;
+            case 'loot':
+                LootList.set(item, cellModel);
+                break;
+            case 'hurdle':
+                StoneList.set(item, cellModel);
+                break;
 
-        if (['enemy'].includes(itemData.type)) {
-            item.dataset.walk = 0;
+            default:
+                break;
         }
 
         return item;
     }
+
 }

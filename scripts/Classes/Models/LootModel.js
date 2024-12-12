@@ -13,9 +13,9 @@ export class LootModel extends FallingModel {
      * @param {HTMLDivElement} loot 
      * @param {number} id 
      */
-    constructor(loot, id) {
-        super(loot, id, 120)
-
+    constructor(loot, id, cell) {
+        super(loot, id, 120);
+        this.cellInit(cell);
     }
 
     //#################################################################################

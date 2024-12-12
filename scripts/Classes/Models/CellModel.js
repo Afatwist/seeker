@@ -34,15 +34,15 @@ export class CellModel extends MainModel {
     /** Создание экземпляра клетки
      * 
      * @param {HTMLDivElement} cell 
+     * @param {number} row
+     * @param {number} col 
      */
-    constructor(cell) {
-        let elemRow = parseInt(cell.dataset.row);
-        let elemCol = parseInt(cell.dataset.col);
+    constructor(cell, row, col) {
 
-        super(cell, CellModel.idMaker(elemRow, elemCol));
+        super(cell, CellModel.idMaker(row, col));
 
-        this.row = elemRow;
-        this.col = elemCol;
+        this.row = row;
+        this.col = col;
         this.type = cell.dataset.type;
         this.element = cell;
         this.item = null
@@ -130,7 +130,6 @@ export class CellModel extends MainModel {
      * @param {Player|EnemyModel|StoneModel|LootModel} item 
      */
     itemSet(item) {
-
         if (!this.itemHas()) {
             item.cell.item = null
             this.element.appendChild(item.element);

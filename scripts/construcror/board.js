@@ -234,7 +234,7 @@ function createNewItem(action) {
     let item = document.createElement('div');
     item.classList.add('item', action.item);
     item.dataset.type = action.type;
-    if (['loot', 'hurdle'].includes(action.type)) item.dataset.fall = '0'; // удалить
+    if (['loot', 'hurdle'].includes(action.type)) item.dataset.fall = '0'; //!!! удалить !!! уже не используется
     return item;
 }
 

@@ -8,18 +8,27 @@ export class CellList {
      * - string - id клетки 
      * - CellModel - объект содержащий данные клетки и сам HTMLElement клетки
      */
-    static #all = new Map()
+    static #all = new Map();
+
+    /** клетка Финиш
+     * @type {CellModel | null}
+     */
+    static finish = null;
 
     /** Добавить клетку в список
      * 
-     * @param {Element} cell 
+     * @param {HTMLDivElement} cell
+     * @param {number} row
+     * @param {number} col  
+     * @returns {CellModel}
      * 
      */
-    static set(cell) {
-        const item = new CellModel(cell);
-
+    static set(cell, row, col) {
+        const item = new CellModel(cell, row, col);
         this.#all.set(item.id, item);
 
+        if (item.type === 'finish-open' || item.type === 'finish-close') this.finish = item;
+        return item;
     }
 
     /** Полный список всех клеток на поле

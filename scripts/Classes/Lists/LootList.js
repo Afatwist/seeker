@@ -17,19 +17,14 @@ export class LootList {
      */
     static #counter = 0
 
-    /** Создать список добычи */
-    static makeList() {
-        Array.from(document.querySelectorAll("[data-type='loot']")).reverse().forEach(loot => {
-            this.#set(loot)
-        });
-    }
 
     /** Добавить добычу в список
      * 
-     * @param {Element} loot 
+     * @param {HTMLDivElement} loot
+     * @param {CellModel} cell 
      */
-    static #set(loot) {
-        const item = new LootModel(loot, this.#counter);
+    static set(loot, cell) {
+        const item = new LootModel(loot, this.#counter, cell);
         this.#all.set(item.id, item);
         this.#counter++
     }

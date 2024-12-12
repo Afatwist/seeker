@@ -1,4 +1,6 @@
+import { CellModel } from "../Models/CellModel.js";
 import { EnemyModel } from "../Models/EnemyModel.js"
+
 
 /** Список всех врагов на поле */
 export class EnemyList {
@@ -13,19 +15,14 @@ export class EnemyList {
      */
     static #counter = 0
 
-    /** Создать список врагов */
-    static makeList() {
-        document.querySelectorAll("[data-type='enemy']").forEach(enemy => {
-            this.set(enemy)
-        });
-    }
 
     /** Добавить врага в список
      * 
-     * @param {Element} enemy 
+     * @param {HTMLDivElement} enemy
+     * @param {CellModel} cell 
      */
-    static set(enemy) {
-        const item = new EnemyModel(enemy, this.#counter);
+    static set(enemy, cell) {
+        const item = new EnemyModel(enemy, this.#counter, cell);
         this.#all.set(item.id, item);
         this.#counter++
     }
