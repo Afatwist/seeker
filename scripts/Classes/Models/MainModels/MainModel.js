@@ -21,9 +21,6 @@ export class MainModel {
     constructor(element, id) {
         this.element = element;
         this.id = id;
-
-        this.element.dataset.id = id; // удалить, если не потребуется
-
     }
 
     //################ Стили, классы и внешний вид элемента на поле #####

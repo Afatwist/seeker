@@ -69,7 +69,7 @@ export class PlayerModel {
 
                 // Клетки с сокровищем
                 if (item instanceof LootModel) {
-                    LootList.delete(parseInt(item.element.dataset.id));
+                    LootList.delete(item.id);
                     cell.itemRemove();
                     this.pushToCell(cell);
                 }
