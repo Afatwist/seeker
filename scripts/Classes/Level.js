@@ -42,11 +42,11 @@ export class Level {
       this.board.size.rows = data.board?.size.rows || 1;
       this.board.size.cols = data.board?.size.cols || 1;
       this.board.data = data.board?.data || [];
-/* 
-      if (!this.protectionCheck(data.protection)) {
-         alert("Данные в файле были повреждены! Выберете другой файл.");
-         window.history.back();
-      } */
+      /* 
+            if (!this.protectionCheck(data.protection)) {
+               alert("Данные в файле были повреждены! Выберете другой файл.");
+               window.history.back();
+            } */
    }
 
 

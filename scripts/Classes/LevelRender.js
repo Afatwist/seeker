@@ -40,22 +40,17 @@ export class LevelRender {
      */
     static #graphics_set;
 
-    /** Описание клеток и предметов на поле */
-    static #set_description;
 
-    /** Устанавливает данные о текущем уровне
-     * 
+    /** Устанавливает данные о текущем уровне     * 
      * @param {Level} levelData данные о размере поля и клетках
-     * @param {boolean} [set_description=false] 
-     * @returns {LevelRender} экземпляр класса
+     * @returns {typeof LevelRender} экземпляр класса
      */
-    static setData(levelData, set_description = false) {
+    static setData(levelData) {
         this.#id = levelData.id;
         this.#levelTitle = levelData.title;
         this.#boardSize = levelData.board.size;
         this.#boardData = levelData.board.data.reverse();
         this.#graphics_set = levelData.graphics_set;
-        this.#set_description = set_description;
         return this;
     }
 

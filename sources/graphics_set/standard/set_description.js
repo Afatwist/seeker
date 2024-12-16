@@ -1,12 +1,13 @@
+/** Описание набора графики */
+import '../../../scripts/constructor/types.js'
 /**
- * описание набора графики
+ * @type {SetDescription}
  */
 export const set_desc = {
     title: 'Стандартный',
     description: 'Стандартный набор графики',
     version: 1.0,
     game_type: ['boulder_dash'],
-
     items: {
         pointer: {
             menu_title: 'Старт и Финиш',
@@ -30,18 +31,18 @@ export const set_desc = {
         },
 
         loot: {
-            menu_title: 'Добыча', // название для раздела меню
+            menu_title: 'Добыча',
             set: [
                 {
-                    level: 1, // уровень
-                    class: 'loot-1', // название класса
-                    file: 'jewel_yellow', // название файла
-                    title: 'Оранжевый алмаз', // название для кнопки в конструкторе
+                    level: 1,
+                    class: 'loot-1',
+                    file: 'jewel_yellow',
+                    title: 'Оранжевый алмаз',
 
-                    dataset: {
-                        scores: 100, // очки за сбор добычи
-                        fall: 0,
-                    }
+                    // dataset: {
+                    //     scores: 100, // очки за сбор добычи
+                    //     fall: 0,
+                    // }
                 },
 
                 {
@@ -50,10 +51,10 @@ export const set_desc = {
                     file: 'jewel_blue',
                     title: 'Сапфир',
 
-                    dataset: {
-                        scores: 200, // очки за сбор добычи
-                        fall: 0,
-                    }
+                    // dataset: {
+                    //     scores: 200, // очки за сбор добычи
+                    //     fall: 0,
+                    // }
                 }
             ]
         },
@@ -67,10 +68,10 @@ export const set_desc = {
                     file: 'stone',
                     title: 'Серый камень',
 
-                    dataset: {
-                        wight: 1, // вес препятствия влияет на скорость падения и перемещения его игроком
-                        fall: 0,
-                    }
+                    // dataset: {
+                    //     wight: 1, // вес препятствия влияет на скорость падения и перемещения его игроком
+                    //     fall: 0,
+                    // }
                 },
             ]
         },
@@ -84,9 +85,9 @@ export const set_desc = {
                     type: 'free',
                     title: 'Свободная клетка',
 
-                    dataset: {
-                        speed: 1, // скорость перемещения по клетке
-                    }
+                    // dataset: {
+                    //     speed: 1, // скорость перемещения по клетке
+                    // }
 
                 },
 
@@ -96,9 +97,9 @@ export const set_desc = {
                     type: 'ground',
                     title: 'Земля',
 
-                    dataset: {
-                        speed: 0.7, // скорость перемещения по клетке
-                    }
+                    // dataset: {
+                    //     speed: 0.7, // скорость перемещения по клетке
+                    // }
                 },
 
                 {
@@ -107,9 +108,9 @@ export const set_desc = {
                     type: 'wall',
                     title: 'Стена',
 
-                    dataset: {
-                        speed: 0, // скорость перемещения по клетке
-                    }
+                    // dataset: {
+                    //     speed: 0, // скорость перемещения по клетке
+                    // }
                 }
             ]
         },
@@ -118,50 +119,19 @@ export const set_desc = {
             menu_title: 'Противник',
             set: [
                 {
-                    level: 1, // уровень
-                    class: 'enemy-walk', // название класса
-                    file: 'enemy-1', // название файла
-                    title: 'Обычный противник', // название для кнопки в конструкторе
+                    level: 1,
+                    class: 'enemy-walk',
+                    file: 'enemy-1',
+                    title: 'Обычный противник',
 
 
-                    dataset: {
-                        speed: 1, // скорость передвижения по клеткам
-                        angry_distance: 1, // дистанция реагирования на игрока
-                        walk: 0
-                    }
+                    // dataset: {
+                    //     speed: 1, // скорость передвижения по клеткам
+                    //     angry_distance: 1, // дистанция реагирования на игрока
+                    //     walk: 0
+                    // }
                 }
             ]
         }
     }
-
-
-
 }
-
-/* 
-пример для items
-каждый тип предметов в массив объектов:
-
-items_new: {
-    loot: {
-    menu_title: 'Добыча',
-    set: [
-        {
-        level: 1, // уровень
-        class: 'loot-1'
-        file: 'jewel_yellow', // путь к файлу
-        title: 'Оранжевый алмаз', // название
-        scores: 100, // количество очков
-    },
-            {
-        level: 2, 
-        class: 'loot_2'
-        file: 'jewel_blue', 
-        title: 'Сапфир', 
-        scores: 200, 
-    }
-    ]
-}
-}
-
-*/
