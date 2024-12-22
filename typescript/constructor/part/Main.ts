@@ -156,6 +156,6 @@ export class Main {
         cell.dataset.type = type;
         cell.className = '';
         cell.classList.add('cell', type);
-        if (item) cell.replaceChildren(item);
+        cell.replaceChildren(item || '');
     }
 }
