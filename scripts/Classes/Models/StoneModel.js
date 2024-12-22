@@ -1,33 +1,12 @@
-import { CellList } from "../Lists/CellList.js";
 import { StoneList } from "../Lists/StoneList.js";
-import { EnemyModel } from "./EnemyModel.js";
 import { FallingModel } from "./MainModels/FallingModel.js";
-import { PlayerModel as Player } from "./PlayerModel.js";
-
-/** Класс Камней.
- * 
- * Камень при падении с большой высоты может убить Игрока или Врага.
- * 
- * Для этого Камень должен пролететь минимум 2 клетки перед ударом.
- * 
- */
 export class StoneModel extends FallingModel {
-
     list = 'stone';
-
-    /**
-     * @param {HTMLDivElement} stone 
-     * @param {number} id 
-     */
     constructor(stone, id, cell) {
         super(stone, id, 120);
         this.cellInit(cell);
-
     }
-
-    /** Падение предметов */
     fallDown() {
-        // проверка, что предмет все еще существует
         if (!this.element || !StoneList.getOne(this.id)) {
             console.error('Такого камня уже нет', this, StoneList.getOne(this.id));
             return;
@@ -35,3 +14,4 @@ export class StoneModel extends FallingModel {
         super.fallDown();
     }
 }
+//# sourceMappingURL=StoneModel.js.map

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/standard-levels.css">
     <link rel="stylesheet" href="../styles/form.css">
+
     <script type="module" src="../scripts/file-choose.js" defer></script>
     <script type="module" src="../scripts/btn-menu.js" defer></script>
 </head>
@@ -21,7 +22,12 @@
         </header>
 
         <div class="box box-levels-list flex-col">
+            <h2 class="sub-title select-not">Стандартные уровни</h2>
+            <div class="levels-list" id="levels-list"></div>
+        </div>
 
+        <div class="box box-levels-list flex-col">
+            <h2 class="sub-title select-not">Свой уровень</h2>
             <div class="menu flex-row">
                 <form class="form flex-col" id="form-choose">
                     <div class="form-section flex-col">
@@ -37,9 +43,9 @@
                     <button class="btn btn-lg btn-secondary" id="to-main-page">Главная страница</button>
                 </div>
             </div>
-            <h2 class="sub-title select-not">Стандартные уровни</h2>
-            <div class="levels-list" id="levels-list"></div>
         </div>
+
+
     </div>
 </body>
 
