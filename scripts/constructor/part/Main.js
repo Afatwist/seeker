@@ -81,6 +81,15 @@ export class Main {
                 currentRow.insertAdjacentElement(this.ACTION.position, newRow);
                 break;
             case 'row-remove':
+                let rows = document.querySelectorAll('.row');
+                if (rows.length === 1) {
+                    alert('На поле должен быть минимум один ряд!');
+                    return;
+                }
+                if (document.getElementsByClassName('cell').length <= 4) {
+                    alert('На поле должно быть минимум 4 клетки!');
+                    return;
+                }
                 cell.closest('.row').remove();
                 break;
             default: break;
@@ -96,10 +105,22 @@ export class Main {
                     insertAdjacentElement(this.ACTION.position, ControlBtn.btnRender('col', ''));
                 break;
             case 'col-remove':
+                let controlButtons = document.querySelectorAll('.control-button-top');
+                if (controlButtons.length === 1) {
+                    alert('На поле должна быть минимум одна колонка!');
+                    return;
+                }
+                if (document.getElementsByClassName('cell').length <= 4) {
+                    alert('На поле должно быть минимум 4 клетки!');
+                    return;
+                }
                 document.
                     querySelectorAll(`.cell[data-col="${cell.dataset.col}"]`).
                     forEach(targetCell => targetCell.remove());
-                document.querySelector(`.control-button-top[data-number="${cell.dataset.col}"]`).remove();
+                controlButtons.forEach(btn => {
+                    if (btn.dataset.number === cell.dataset.col)
+                        btn.remove();
+                });
                 break;
             default: break;
         }

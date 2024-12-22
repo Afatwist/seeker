@@ -2,7 +2,7 @@ import { Level } from "../../Classes/Level.js";
 import { BackForwardAction } from "./BackForwardAction.js";
 import { BoardInfo } from "./BoardInfo.js";
 import { ControlBtn } from "./ControlBtn.js";
-
+//!!! исправить методы удаления рядов и колонок!!!
 /** Основной класс конструктора */
 export class Main {
 
@@ -109,6 +109,18 @@ export class Main {
                 break;
 
             case 'row-remove':
+
+                let rows: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.row');
+
+                if (rows.length === 1) {
+                    alert('На поле должен быть минимум один ряд!');
+                    return;
+                }
+                if (document.getElementsByClassName('cell').length <= 4) {
+                    alert('На поле должно быть минимум 4 клетки!');
+                    return;
+                }
+
                 cell.closest('.row')!.remove();
                 break;
 
@@ -134,13 +146,27 @@ export class Main {
                 break;
 
             case 'col-remove':
+
+                let controlButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.control-button-top');
+
+                if (controlButtons.length === 1) {
+                    alert('На поле должна быть минимум одна колонка!');
+                    return;
+                }
+                if (document.getElementsByClassName('cell').length <= 4) {
+                    alert('На поле должно быть минимум 4 клетки!');
+                    return;
+                }
+
                 // удаление колонки
                 document.
                     querySelectorAll(`.cell[data-col="${cell.dataset.col}"]`).
                     forEach(targetCell => targetCell.remove());
-                // удаление верхней кнопки для колонки
-                document.querySelector(`.control-button-top[data-number="${cell.dataset.col}"]`)!.remove();
 
+                // удаление верхней кнопки для колонки
+                controlButtons.forEach(btn => {
+                    if (btn.dataset.number === cell.dataset.col) btn.remove();
+                })
                 break;
 
             default: break;
