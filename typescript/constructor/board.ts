@@ -17,6 +17,7 @@ import { SideMenu } from "./part/SideMenu.js";
 import { Main } from "./part/Main.js";
 import { ControlBtn } from "./part/ControlBtn.js";
 import { BackForwardAction } from "./part/BackForwardAction.js";
+import { BoardSize } from "./part/BoardSize.js";
 
 // Получение данных игры из localStorage 
 const gameData: ILevelData = JSON.parse(localStorage.getItem('gameData') as string);
@@ -34,6 +35,6 @@ SideMenu.render(set_desc).listener();
 TopMenu.listener();
 ControlBtn.make();
 Main.handler();
-
+BoardSize.init();
 BoardInfo.init().update(true);
 BackForwardAction.init().listener();

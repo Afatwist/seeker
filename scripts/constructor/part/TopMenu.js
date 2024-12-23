@@ -1,4 +1,5 @@
 import html2canvas from "../../vendors/html2canvas/html2canvas.js";
+import { BoardSize } from "./BoardSize.js";
 import { Main } from "./Main.js";
 export class TopMenu {
     static BOARD = document.querySelector('.board');
@@ -22,6 +23,8 @@ export class TopMenu {
     }
     static #btnSave() {
         document.getElementById('btnSave').addEventListener('click', () => {
+            if (BoardSize.check())
+                return;
             if (this.#startChecker()) {
                 this.#borderMaker();
                 this.#cellsToData();
@@ -31,6 +34,8 @@ export class TopMenu {
     }
     static #btnMakeScreenshot() {
         document.getElementById('btnScreenshot').addEventListener('click', () => {
+            if (BoardSize.check())
+                return;
             this.#borderMaker();
             html2canvas(this.BOARD, {
                 x: 40,
@@ -49,6 +54,8 @@ export class TopMenu {
     }
     static #btnPlay() {
         document.getElementById('btnPlay').addEventListener('click', () => {
+            if (BoardSize.check())
+                return;
             if (this.#startChecker()) {
                 this.#borderMaker();
                 this.#cellsToData();

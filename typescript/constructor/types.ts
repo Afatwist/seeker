@@ -43,6 +43,7 @@ interface SetDescription {
  */
 interface ActionBtn {
     menu: string;
+    /** тип кнопки */
     type: string;
     item: string;
     position: string;

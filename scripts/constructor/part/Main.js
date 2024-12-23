@@ -1,6 +1,7 @@
 import { Level } from "../../Classes/Level.js";
 import { BackForwardAction } from "./BackForwardAction.js";
 import { BoardInfo } from "./BoardInfo.js";
+import { BoardSize } from "./BoardSize.js";
 import { ControlBtn } from "./ControlBtn.js";
 export class Main {
     static ACTION = null;
@@ -66,8 +67,12 @@ export class Main {
                 this.updateCell(cell, 'free', this.createNewItem());
                 break;
             case 'type':
-            case 'cell-clear':
             case 'pointer':
+                this.updateCell(cell, this.ACTION.item);
+                break;
+            case 'cell-clear':
+                if (BoardSize.check())
+                    break;
                 this.updateCell(cell, this.ACTION.item);
                 break;
             default: break;
@@ -76,20 +81,15 @@ export class Main {
     static actionHandlerRow(cell) {
         switch (this.ACTION.type) {
             case 'row-add':
+                if (BoardSize.check())
+                    return;
                 let currentRow = cell.closest('.row');
                 let newRow = this.#createNewRow();
                 currentRow.insertAdjacentElement(this.ACTION.position, newRow);
                 break;
             case 'row-remove':
-                let rows = document.querySelectorAll('.row');
-                if (rows.length === 1) {
-                    alert('На поле должен быть минимум один ряд!');
+                if (BoardSize.check())
                     return;
-                }
-                if (document.getElementsByClassName('cell').length <= 4) {
-                    alert('На поле должно быть минимум 4 клетки!');
-                    return;
-                }
                 cell.closest('.row').remove();
                 break;
             default: break;
@@ -98,6 +98,8 @@ export class Main {
     static actionHandlerCol(cell) {
         switch (this.ACTION.type) {
             case 'col-add':
+                if (BoardSize.check())
+                    return;
                 document.
                     querySelectorAll(`.cell[data-col="${cell.dataset.col}"]`).
                     forEach(targetCell => targetCell.insertAdjacentElement(this.ACTION.position, this.createNewCell()));
@@ -105,15 +107,9 @@ export class Main {
                     insertAdjacentElement(this.ACTION.position, ControlBtn.btnRender('col', ''));
                 break;
             case 'col-remove':
+                if (BoardSize.check())
+                    return;
                 let controlButtons = document.querySelectorAll('.control-button-top');
-                if (controlButtons.length === 1) {
-                    alert('На поле должна быть минимум одна колонка!');
-                    return;
-                }
-                if (document.getElementsByClassName('cell').length <= 4) {
-                    alert('На поле должно быть минимум 4 клетки!');
-                    return;
-                }
                 document.
                     querySelectorAll(`.cell[data-col="${cell.dataset.col}"]`).
                     forEach(targetCell => targetCell.remove());

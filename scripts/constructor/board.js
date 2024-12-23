@@ -6,6 +6,7 @@ import { SideMenu } from "./part/SideMenu.js";
 import { Main } from "./part/Main.js";
 import { ControlBtn } from "./part/ControlBtn.js";
 import { BackForwardAction } from "./part/BackForwardAction.js";
+import { BoardSize } from "./part/BoardSize.js";
 const gameData = JSON.parse(localStorage.getItem('gameData'));
 const { set_desc } = await import(`../../sources/graphics_set/${gameData.graphics_set}/set_description.js`);
 Main.init(gameData);
@@ -15,6 +16,7 @@ SideMenu.render(set_desc).listener();
 TopMenu.listener();
 ControlBtn.make();
 Main.handler();
+BoardSize.init();
 BoardInfo.init().update(true);
 BackForwardAction.init().listener();
 //# sourceMappingURL=board.js.map

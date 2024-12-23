@@ -1,16 +1,17 @@
 import { Level } from "../../Classes/Level.js";
 import { BackForwardAction } from "./BackForwardAction.js";
 import { BoardInfo } from "./BoardInfo.js";
+import { BoardSize } from "./BoardSize.js";
 import { ControlBtn } from "./ControlBtn.js";
 //!!! исправить методы удаления рядов и колонок!!!
 /** Основной класс конструктора */
 export class Main {
 
     /** Текущая нажатая кнопка на боковой панели */
-    static ACTION: ActionBtn | null = null
+    static ACTION: ActionBtn | null = null;
 
     /** Текущий уровень */
-    static LEVEL: Level
+    static LEVEL: Level;
 
     /** Подготовка данных */
     static init(data: ILevelData): void {
@@ -88,11 +89,13 @@ export class Main {
                 break;
 
             case 'type':        // Смена типа клетки
-            case 'cell-clear':  // Удаление/очистка клетки
             case 'pointer':     // Добавление клеток Старт и Финиш
                 this.updateCell(cell, this.ACTION!.item);
                 break;
-
+            case 'cell-clear':  // Удаление/очистка клетки
+                if (BoardSize.check()) break;
+                this.updateCell(cell, this.ACTION!.item);
+                break;
             default: break;
         }
     }
@@ -103,6 +106,7 @@ export class Main {
     static actionHandlerRow(cell: HTMLDivElement) {
         switch (this.ACTION!.type) {
             case 'row-add':
+                if (BoardSize.check()) return;
                 let currentRow = cell.closest('.row')!;
                 let newRow = this.#createNewRow();
                 currentRow.insertAdjacentElement(this.ACTION!.position as InsertPosition, newRow);
@@ -110,16 +114,18 @@ export class Main {
 
             case 'row-remove':
 
-                let rows: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.row');
+                // let rows: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.row');
+                // console.log(this.#rows.length);
 
-                if (rows.length === 1) {
-                    alert('На поле должен быть минимум один ряд!');
-                    return;
-                }
-                if (document.getElementsByClassName('cell').length <= 4) {
-                    alert('На поле должно быть минимум 4 клетки!');
-                    return;
-                }
+                // if (rows.length === 1) {
+                //     alert('На поле должен быть минимум один ряд!');
+                //     return;
+                // }
+                // if (document.getElementsByClassName('cell').length <= 4) {
+                //     alert('На поле должно быть минимум 4 клетки!');
+                //     return;
+                // }
+                if (BoardSize.check()) return;
 
                 cell.closest('.row')!.remove();
                 break;
@@ -134,6 +140,9 @@ export class Main {
     static actionHandlerCol(cell: HTMLDivElement) {
         switch (this.ACTION!.type) {
             case 'col-add':
+
+                if (BoardSize.check()) return;
+
                 // новая колонка
                 document.
                     querySelectorAll(`.cell[data-col="${cell.dataset.col}"]`).
@@ -146,17 +155,9 @@ export class Main {
                 break;
 
             case 'col-remove':
+                if (BoardSize.check()) return;
 
                 let controlButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll('.control-button-top');
-
-                if (controlButtons.length === 1) {
-                    alert('На поле должна быть минимум одна колонка!');
-                    return;
-                }
-                if (document.getElementsByClassName('cell').length <= 4) {
-                    alert('На поле должно быть минимум 4 клетки!');
-                    return;
-                }
 
                 // удаление колонки
                 document.

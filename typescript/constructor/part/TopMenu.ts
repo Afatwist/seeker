@@ -2,6 +2,7 @@
 
 //import html2canvas from "../../vendors/html2canvas/dist/html2canvas.esm.js";
 import html2canvas from "../../vendors/html2canvas/html2canvas.js";
+import { BoardSize } from "./BoardSize.js";
 import { Main } from "./Main.js";
 
 /** Верхнее меню конструктора */
@@ -39,6 +40,8 @@ export class TopMenu {
     static #btnSave(): void {
         document.getElementById('btnSave')!.addEventListener('click', () => {
 
+            if (BoardSize.check()) return;
+
             if (this.#startChecker()) {
                 this.#borderMaker();
                 this.#cellsToData();
@@ -50,6 +53,7 @@ export class TopMenu {
     /** кнопка "Сделать скриншот" */
     static #btnMakeScreenshot(): void {
         document.getElementById('btnScreenshot')!.addEventListener('click', () => {
+            if (BoardSize.check()) return;
             this.#borderMaker();
 
             html2canvas(this.BOARD as HTMLDivElement, {
@@ -71,6 +75,7 @@ export class TopMenu {
     /** кнопка "Играть!" */
     static #btnPlay(): void {
         document.getElementById('btnPlay')!.addEventListener('click', () => {
+            if (BoardSize.check()) return;
 
             if (this.#startChecker()) {
                 this.#borderMaker();
